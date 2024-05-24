@@ -16,14 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .swagger import urlpatterns as urlpatterns_swagger
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('user.urls')),
     # re_path(r'^auth/', include('djoser.urls')),
-    re_path(r'^auth/', include('djoser.urls.authtoken')),
+    re_path(r'^api/auth/', include('djoser.urls.authtoken')),
 
 ]
 
