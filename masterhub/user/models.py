@@ -6,13 +6,22 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     CHOICES = [
-        ('M', 'мастер'),
-        ('S', 'студия'),
-        ('C', 'клиент'),
+        ('Мастер', 'мастер'),
+        ('Студия', 'студия'),
+        ('Клиент', 'клиент'),
     ]
     specialization = models.CharField(
         verbose_name='специализация',
         choices=CHOICES,
-        max_length=1,
+        max_length=10,
         blank=True,
+    )
+    username = models.CharField(
+        verbose_name='имя',
+        max_length=255,
+        unique=True
+    )
+    email = models.EmailField(
+        verbose_name='почта',
+        unique=True
     )
