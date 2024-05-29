@@ -2,15 +2,10 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import SimpleRouter
 
-
 router = SimpleRouter()
-router.register('test', views.UsersViewSet, basename='test')
-
-
+router.register('users', views.UsersViewSet, basename='users')
 
 urlpatterns = [
-    path('users/', views.UsersAPIView.as_view(), name='users'),
-    path('s/', include(router.urls))
-
-
+    # path('auth/token/login/', views.T.as_view()),
+    path('', include(router.urls))
 ]

@@ -11,3 +11,6 @@ class CustomUserSerializer(ModelSerializer):
     def validate_password(self, data):
         validate_password(data)
         return data
+
+    def save(self):
+        return CustomUser.objects.create_user(**self.initial_data)
