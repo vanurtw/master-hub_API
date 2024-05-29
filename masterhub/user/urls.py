@@ -6,6 +6,6 @@ router = SimpleRouter()
 router.register('users', views.UsersViewSet, basename='users')
 
 urlpatterns = [
-    # path('auth/token/login/', views.T.as_view()),
+    # path('auth/token/login/', views.Test.as_view()),
     path('', include(router.urls))
 ]
