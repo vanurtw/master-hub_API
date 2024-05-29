@@ -14,3 +14,4 @@ class CustomUserAdmin(admin.ModelAdmin):
 class ProfileMasterAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'phone']
     list_display_links = ['id', 'name']
+

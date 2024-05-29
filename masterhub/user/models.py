@@ -31,7 +31,8 @@ class ProfileMaster(models.Model):
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
-        blank=True)
+        blank=True
+    )
     name = models.CharField(
         verbose_name='имя',
         max_length=255,
@@ -50,4 +51,7 @@ class ProfileMaster(models.Model):
     description = models.TextField(verbose_name='описание')
 
     class Meta:
-        verbose_name = 'Профиль мастера/туд'
+        verbose_name = 'Профиль мастера/студия'
+        verbose_name_plural = 'Профили мастеров/студий'
+
+
