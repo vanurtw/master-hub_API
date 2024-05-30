@@ -1,8 +1,10 @@
 from .models import Service
-from rest_framework.serializers import Serializer, ModelSerializer
+from rest_framework import serializers
 
 
-class ServiceSerializer(ModelSerializer):
+class ServiceSerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField(source='user.id')
+
     class Meta:
         model = Service
-        fields = ['user', 'title', 'description', 'price', 'photo']
+        fields = ['id', 'user_id', 'title', 'description', 'price', 'photo']
