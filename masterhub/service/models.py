@@ -9,13 +9,15 @@ def upload_photo_service(instance, filename):
 
 
 class Categories(models.Model):
+    """Модель категорий."""
+
     title = models.CharField(
         verbose_name='категория',
         max_length=255
     )
     photo = models.ImageField(
         verbose_name='изображение',
-        upload_to='media/categories'
+        upload_to='static/media/categories/'
     )
     date_creation = models.DateField(
         verbose_name='дата создания',
@@ -31,6 +33,8 @@ class Categories(models.Model):
 
 
 class Service(models.Model):
+    """Модель услуг."""
+
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -56,7 +60,7 @@ class Service(models.Model):
     category = models.ForeignKey(
         Categories,
         verbose_name='категория',
-        on_delete=models.CASCADE()
+        on_delete=models.CASCADE
     )
     date_creation = models.DateField(
         verbose_name='дата создания',
