@@ -10,11 +10,9 @@ def upload_photo_service(instance, filename):
 
 
 class Service(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        blank=True,
-
     )
     title = models.CharField(
         verbose_name='заголовок',
