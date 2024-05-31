@@ -1,9 +1,10 @@
-from rest_framework.serializers import ModelSerializer, Serializer
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser, ProfileMaster
+from .models import CustomUser, ProfileMaster, ProfileImages
+from rest_framework import serializers
+from service.models import Service
 
 
-class CustomUserSerializer(ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password']
@@ -16,8 +17,33 @@ class CustomUserSerializer(ModelSerializer):
         return CustomUser.objects.create_user(**self.initial_data)
 
 
-class ProfileMasterSerializer(ModelSerializer):
+class ProfileImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileImages
+        fields = ['image']
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['title', 'description', 'price', 'photo']
+
+
+class ProfileMasterSerializer(serializers.ModelSerializer):
+    images_work = serializers.SerializerMethodField()
+    services = serializers.SerializerMethodField()
+
+    def get_images_work(self, obj):
+        queryset = obj.profile_images.all()
+        serializer = ProfileImagesSerializer(queryset, many=True)
+        return serializer.data
+
+    def get_services(self, obj):
+        queryset = obj.services.all()
+        serializer = ServiceSerializer(queryset, many=True)
+        return serializer.data
 
     class Meta:
         model = ProfileMaster
-        fields = ['id', 'user', 'name', 'address', 'phone', 'link_vk', 'link_tg', 'description']
+        fields = ['id', 'user', 'name', 'address', 'phone', 'link_vk', 'link_tg', 'description', 'images_work',
+                  'services']

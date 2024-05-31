@@ -2,6 +2,7 @@ from django.db import models
 from user.models import CustomUser
 # Create your models here.
 from django.conf import settings
+from user.models import ProfileMaster
 
 
 def upload_photo_service(instance, filename):
@@ -35,9 +36,10 @@ class Categories(models.Model):
 class Service(models.Model):
     """Модель услуг."""
 
-    user = models.ForeignKey(
-        CustomUser,
+    profile = models.ForeignKey(
+        ProfileMaster,
         on_delete=models.CASCADE,
+        related_name='services'
     )
     title = models.CharField(
         verbose_name='заголовок',

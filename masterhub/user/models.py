@@ -69,12 +69,16 @@ class ProfileMaster(models.Model):
         verbose_name = 'Профиль мастера/студия'
         verbose_name_plural = 'Профили мастеров/студий'
 
+    def __str__(self):
+        return f'profile_{self.user}'
+
 
 class ProfileImages(models.Model):
     profile = models.ForeignKey(
         ProfileMaster,
         verbose_name='профиль',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='profile_images'
     )
     image = models.ImageField(
         verbose_name='изображение',
@@ -82,6 +86,8 @@ class ProfileImages(models.Model):
     )
     date_creation = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f'image_{self.profile}'
 # @receiver(post_save, sender=CustomUser)
 # def create_profile(sender, instance, **kwargs):
 #     pass

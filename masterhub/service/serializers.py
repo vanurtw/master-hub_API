@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    user_id = serializers.CharField(source='user.id')
+    user_id = serializers.CharField(source='profile.user.id')
 
     class Meta:
         model = Service
