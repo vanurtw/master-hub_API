@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, ProfileMaster, ProfileImages
+from .models import CustomUser, ProfileMaster, ProfileImages, Specialist
 
 
 # Register your models here.
@@ -21,3 +21,7 @@ class ProfileImagesAdmin(admin.ModelAdmin):
     list_display = ['id', 'profile', 'date_creation']
     list_filter = ['profile', 'date_creation']
 
+
+@admin.register(Specialist)
+class SpecialistAdmin(admin.ModelAdmin):
+    list_display = ['id']

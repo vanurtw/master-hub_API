@@ -39,7 +39,7 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_services(self, obj):
-        queryset = obj.services.all()
+        queryset = obj.profile_services.all()
         serializer = ServiceSerializer(queryset, many=True)
         return serializer.data
 

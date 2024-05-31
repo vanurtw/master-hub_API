@@ -73,12 +73,34 @@ class ProfileMaster(models.Model):
         return f'profile_{self.user}'
 
 
+class Specialist(models.Model):
+    name = models.CharField(
+        verbose_name='имя',
+        max_length=255
+    )
+    job = models.CharField(
+        verbose_name='кфалификация',
+        max_length=50
+    )
+    description = models.TextField(verbose_name='описание')
+
+
 class ProfileImages(models.Model):
     profile = models.ForeignKey(
         ProfileMaster,
         verbose_name='профиль',
         on_delete=models.CASCADE,
-        related_name='profile_images'
+        related_name='profile_images',
+        blank=True,
+        null=True
+    )
+    specialist = models.ForeignKey(
+        Specialist,
+        on_delete=models.CASCADE,
+        related_name='secialist_images',
+        verbose_name='специалист',
+        blank=True,
+        null=True
     )
     image = models.ImageField(
         verbose_name='изображение',
