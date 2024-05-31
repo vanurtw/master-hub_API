@@ -130,6 +130,162 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2024-05-30T16:15:44.585Z",
+    "user": 1,
+    "content_type": 6,
+    "object_id": "3",
+    "object_repr": "awd",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2024-05-30T16:30:50.857Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "ProfileMaster object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2024-05-30T16:30:57.980Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "ProfileMaster object (1)",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2024-05-30T16:32:53.968Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "ProfileImages object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2024-05-30T16:33:12.227Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "ProfileImages object (2)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2024-05-30T16:33:17.403Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "ProfileImages object (3)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2024-05-31T04:18:50.894Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "service_Красивые ресницы",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"User\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2024-05-31T04:18:55.029Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "service_Красивые брови",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"User\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2024-05-31T05:09:34.291Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "profile_test",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2024-05-31T05:12:41.198Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "1",
+    "object_repr": "Specialist object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2024-05-31T05:30:55.700Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "service_Красивые ресницы",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u041f\\u0440\\u043e\\u0444\\u0438\\u043b\\u044c \\u043c\\u0430\\u0441\\u0442\\u0435\\u0440\\u0430\", \"\\u0421\\u043f\\u0435\\u0446\\u0438\\u0430\\u043b\\u0438\\u0441\\u0442\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2024-05-31T05:50:47.874Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "image_None",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -526,6 +682,78 @@
   }
 },
 {
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add profile images",
+    "content_type": 12,
+    "codename": "add_profileimages"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change profile images",
+    "content_type": 12,
+    "codename": "change_profileimages"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete profile images",
+    "content_type": 12,
+    "codename": "delete_profileimages"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view profile images",
+    "content_type": 12,
+    "codename": "view_profileimages"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add specialist",
+    "content_type": 13,
+    "codename": "add_specialist"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change specialist",
+    "content_type": 13,
+    "codename": "change_specialist"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete specialist",
+    "content_type": 13,
+    "codename": "delete_specialist"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view specialist",
+    "content_type": 13,
+    "codename": "view_specialist"
+  }
+},
+{
   "model": "contenttypes.contenttype",
   "pk": 1,
   "fields": {
@@ -614,6 +842,22 @@
   }
 },
 {
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "user",
+    "model": "profileimages"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "user",
+    "model": "specialist"
+  }
+},
+{
   "model": "sessions.session",
   "pk": "j51rbvmxkjjosnqd41n1a65ig38k8cp5",
   "fields": {
@@ -633,7 +877,6 @@
     "is_staff": true,
     "is_active": true,
     "date_joined": "2024-05-30T10:32:52.989Z",
-    "specialization": "",
     "username": "admin",
     "email": "admin@admin.com",
     "groups": [],
@@ -645,18 +888,115 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$720000$UL6uC6aAEtKkvH7V6lSFv2$QcuTxlPpDqz6OnAh35lt+bOtURveQrnjADrg2uKvnGo=",
-    "last_login": null,
+    "last_login": "2024-05-30T11:43:45.611Z",
     "is_superuser": false,
     "first_name": "",
     "last_name": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2024-05-30T10:55:19.546Z",
-    "specialization": "Клиент",
     "username": "user",
     "email": "user@user.com",
     "groups": [],
     "user_permissions": []
+  }
+},
+{
+  "model": "user.customuser",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$jAfQQnQRzJlsdlt3mcZ0HH$k5nwfriXpFgsliVN42ErGt6miOs+hZWMEJcN0PFGFnc=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-05-31T05:09:03.010Z",
+    "username": "test",
+    "email": "test@test.ru",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "user.profilemaster",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "name": "Гай Ричи",
+    "address": "awd",
+    "phone": "awd",
+    "specialization": "master",
+    "link_vk": "http://127.0.0.1:8000/admin/user/profilemaster/add/",
+    "link_tg": "http://127.0.0.1:8000/admin/user/profilemaster/add/",
+    "description": "awdawd",
+    "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "user.profilemaster",
+  "pk": 2,
+  "fields": {
+    "user": 4,
+    "name": "test",
+    "address": "test",
+    "phone": "test",
+    "specialization": "studio",
+    "link_vk": "http://127.0.0.1:8000/admin/user/profilemaster/add/",
+    "link_tg": "http://127.0.0.1:8000/admin/user/profilemaster/add/",
+    "description": "test",
+    "date_creation": "2024-05-31"
+  }
+},
+{
+  "model": "user.specialist",
+  "pk": 1,
+  "fields": {
+    "name": "test",
+    "job": "test",
+    "description": "test",
+    "profile": 2
+  }
+},
+{
+  "model": "user.profileimages",
+  "pk": 1,
+  "fields": {
+    "profile": 1,
+    "specialist": null,
+    "image": "static/media/profile/user/photo_2022-04-08_12-02-55Narashh.jpg",
+    "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "user.profileimages",
+  "pk": 2,
+  "fields": {
+    "profile": 1,
+    "specialist": null,
+    "image": "static/media/profile/user/photo_2022-04-08_12-03-09Narashh.jpg",
+    "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "user.profileimages",
+  "pk": 3,
+  "fields": {
+    "profile": 1,
+    "specialist": null,
+    "image": "static/media/profile/user/r_ow4fjf8gbco99f6t_1649092220.jpg",
+    "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "user.profileimages",
+  "pk": 4,
+  "fields": {
+    "profile": null,
+    "specialist": 1,
+    "image": "static/media/specialist/test/scale_1200.jpg",
+    "date_creation": "2024-05-31"
   }
 },
 {
@@ -699,7 +1039,8 @@
   "model": "service.service",
   "pk": 1,
   "fields": {
-    "user": 2,
+    "profile": 1,
+    "specialist": null,
     "title": "Красивые брови",
     "description": "Красивые брови",
     "price": 2000,
@@ -712,13 +1053,22 @@
   "model": "service.service",
   "pk": 2,
   "fields": {
-    "user": 2,
+    "profile": null,
+    "specialist": 1,
     "title": "Красивые ресницы",
     "description": "Красивые ресницы",
     "price": 2000,
     "photo": "static/media/service/user/images.jpg",
     "category": 3,
     "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "207349a8bdb8c7614798edfe99e7992b592f0f27",
+  "fields": {
+    "user": 4,
+    "created": "2024-05-31T05:09:03.474Z"
   }
 }
 ]
