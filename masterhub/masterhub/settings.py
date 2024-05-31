@@ -140,3 +140,5 @@ DJOSER = {
     'LOGIN_FIELD': 'email'
 }
 
+# python -Xutf8 manage.py dumpdata --indent=2 -o db.json
+# python manage.py loaddata db.json
