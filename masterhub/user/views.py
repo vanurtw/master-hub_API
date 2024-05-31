@@ -15,7 +15,8 @@ class UsersViewSet(GenericViewSet, RetrieveModelMixin):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        serializer = self.serializer_class(data=data)
+        del data['specialization']
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             token = Token.objects.create(user=user)

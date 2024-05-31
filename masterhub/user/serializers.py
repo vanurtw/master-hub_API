@@ -34,16 +34,36 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
     services = serializers.SerializerMethodField()
 
     def get_images_work(self, obj):
-        queryset = obj.profile_images.all()
+        specialization = obj.specialization
+        if specialization == 'master':
+            queryset = obj.profile_images.all()
+        else:
+            queryset = ProfileImages.objects.none()
         serializer = ProfileImagesSerializer(queryset, many=True)
         return serializer.data
 
     def get_services(self, obj):
-        queryset = obj.profile_services.all()
+        specialization = obj.specialization
+        if specialization == 'master':
+            queryset = obj.profile_services.all()
+        else:
+            queryset = Service.objects.none()
+            for specialist in obj.profile_specialist.all():
+                services = specialist.specialist_services.all()
+                queryset = queryset.union(services)
         serializer = ServiceSerializer(queryset, many=True)
         return serializer.data
 
     class Meta:
         model = ProfileMaster
-        fields = ['id', 'user', 'name', 'address', 'phone', 'link_vk', 'link_tg', 'description', 'images_work',
-                  'services']
+        fields = [
+            'id',
+            'user',
+            'name',
+            'specialization',
+            'address', 'phone',
+            'link_vk', 'link_tg',
+            'description',
+            'images_work',
+            'services'
+        ]

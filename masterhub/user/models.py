@@ -8,6 +8,8 @@ from django.conf import settings
 # Create your models here.
 
 def upload_photo_profile(instance, filename):
+    if instance.specialist:
+        return f'{settings.BASE_DIR}/static/media/specialist/{instance.specialist.name}/{filename}'
     return f'{settings.BASE_DIR}/static/media/profile/{instance.profile.user}/{filename}'
 
 
@@ -27,6 +29,11 @@ class CustomUser(AbstractUser):
 
 class ProfileMaster(models.Model):
     """Профиль студии/мастера"""
+
+    CHOICES = [
+        ('master', 'мастер'),
+        ('studio', 'студия'),
+    ]
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
@@ -46,6 +53,12 @@ class ProfileMaster(models.Model):
         verbose_name='телефон',
         max_length=255,
         blank=True
+    )
+    specialization = models.CharField(
+        choices=CHOICES,
+        max_length=25,
+        default='master',
+        verbose_name='специализация'
     )
     link_vk = models.URLField(
         verbose_name='ссылка на VK',
@@ -83,6 +96,14 @@ class Specialist(models.Model):
         max_length=50
     )
     description = models.TextField(verbose_name='описание')
+    profile = models.ForeignKey(
+        ProfileMaster,
+        on_delete=models.CASCADE,
+        related_name='profile_specialist',
+        verbose_name='профиль',
+        blank=True,
+        null=True
+    )
 
 
 class ProfileImages(models.Model):

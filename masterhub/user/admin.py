@@ -12,7 +12,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 @admin.register(ProfileMaster)
 class ProfileMasterAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'phone']
+    list_display = ['id', 'name', 'specialization']
     list_display_links = ['id', 'name']
 
 
