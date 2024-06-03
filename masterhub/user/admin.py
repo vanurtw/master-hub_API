@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews
+from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews, Favorites
 
 
 # Register your models here.
@@ -29,4 +29,9 @@ class SpecialistAdmin(admin.ModelAdmin):
 
 @admin.register(Reviews)
 class ReviewsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Favorites)
+class FavoritesAdmin(admin.ModelAdmin):
     pass

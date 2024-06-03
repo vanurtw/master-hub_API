@@ -1,5 +1,5 @@
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews
+from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews, Favorites
 from rest_framework import serializers
 from service.models import Service
 
@@ -108,3 +108,9 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
             'services',
             'reviews'
         ]
+
+
+class FavoritesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorites
+        fields = ['id', 'user', 'profile', 'date_create']

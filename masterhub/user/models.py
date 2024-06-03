@@ -162,6 +162,22 @@ class Reviews(models.Model):
     data_create = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
+
+class Favorites(models.Model):
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='favorites_user',
+        verbose_name='пользователь'
+    )
+    profile = models.ForeignKey(
+        ProfileMaster,
+        related_name='favorites_profile',
+        on_delete=models.CASCADE,
+        verbose_name='профиль мастера/студии'
+    )
+    date_create = models.DateTimeField(auto_now_add=True)
+
 # @receiver(post_save, sender=CustomUser)
 # def create_profile(sender, instance, **kwargs):
 #     pass

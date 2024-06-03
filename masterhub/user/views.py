@@ -1,11 +1,17 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import CustomUserSerializer, ProfileMasterSerializer
+from .serializers import CustomUserSerializer, ProfileMasterSerializer, FavoritesSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
 from .models import CustomUser, ProfileMaster, ProfileImages
 from rest_framework.decorators import action
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin
+from rest_framework.views import APIView
+from .models import Favorites
+from rest_framework.generics import GenericAPIView
+from service.serializers import ProfileCatalogSerialize
+from rest_framework import permissions
 
 
 # Create your views here.
@@ -34,6 +40,29 @@ class UsersViewSet(GenericViewSet, RetrieveModelMixin):
         if self.action == 'create':
             return CustomUser.objects.all()
         return ProfileMaster.objects.all()
+
+
+class FavoritesViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = ProfileCatalogSerialize
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = [i.profile for i in user.favorites_user.all()]
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        profile_master_id = request.GET.get('id')
+        if not profile_master_id:
+            return Response({'a': 'wd'})
+        flag = Favorites.objects.filter(user=request.user, profile__id=profile_master_id)
+        if flag.exists():
+            return Response({'error': 'podpisan'})
+        data = {'user': request.user.id, 'profile': profile_master_id}
+        serializer = FavoritesSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return self.list(request)
 
 # class Test(APIView):
 #     def post(self, request):
