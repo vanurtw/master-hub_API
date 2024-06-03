@@ -85,7 +85,10 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
         len_queryset = len(queryset)
         serializer = ReviewsSerializer(queryset[:5], many=True)
         rating_detail = {f'rating_{i}': rating_star_all.count(i) * 100 // len_queryset for i in range(1, 6)}
-        data = {'count': len_queryset}
+        data = {
+            'count': len_queryset,
+            'average_rating': round(sum(rating_star_all) / len_queryset, 2)
+        }
         data.update(rating_detail)
         data['detail'] = serializer.data
         return data
