@@ -1,5 +1,5 @@
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser, ProfileMaster, ProfileImages, Specialist
+from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews
 from rest_framework import serializers
 from service.models import Service
 
@@ -35,10 +35,20 @@ class SpecialistSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'job', 'description']
 
 
+class ReviewsSerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField(source='user.id')
+    user_name = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = Reviews
+        fields = ['id', 'user_id', 'user_name', 'rating_star', 'data_create', 'description']
+
+
 class ProfileMasterSerializer(serializers.ModelSerializer):
     images_work = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
     specialists = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
 
     def get_images_work(self, obj):
         specialization = obj.specialization
@@ -69,6 +79,17 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
         serializer = SpecialistSerializer(queryset, many=True)
         return serializer.data
 
+    def get_reviews(self, obj):
+        queryset = obj.reviews_profile.all()
+        rating_star_all = [i.get_rating_star_display() for i in queryset]
+        len_queryset = len(queryset)
+        serializer = ReviewsSerializer(queryset[:5], many=True)
+        rating_detail = {f'rating_{i}': rating_star_all.count(i) * 100 // len_queryset for i in range(1, 6)}
+        data = {'count': len_queryset}
+        data.update(rating_detail)
+        data['detail'] = serializer.data
+        return data
+
     class Meta:
         model = ProfileMaster
         fields = [
@@ -82,4 +103,5 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
             'specialists',
             'images_work',
             'services',
+            'reviews'
         ]

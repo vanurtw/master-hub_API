@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, ProfileMaster, ProfileImages, Specialist
+from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews
 
 
 # Register your models here.
@@ -25,3 +25,8 @@ class ProfileImagesAdmin(admin.ModelAdmin):
 @admin.register(Specialist)
 class SpecialistAdmin(admin.ModelAdmin):
     list_display = ['id']
+
+
+@admin.register(Reviews)
+class ReviewsAdmin(admin.ModelAdmin):
+    pass

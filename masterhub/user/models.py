@@ -131,6 +131,37 @@ class ProfileImages(models.Model):
 
     def __str__(self):
         return f'image_{self.profile}'
+
+
+class Reviews(models.Model):
+    CHOICES = [
+        ('1', 1),
+        ('2', 2),
+        ('3', 3),
+        ('4', 4),
+        ('5', 5),
+    ]
+    profile = models.ForeignKey(
+        ProfileMaster,
+        on_delete=models.CASCADE,
+        related_name='reviews_profile',
+        verbose_name='профиль мастера/студии'
+    )
+    rating_star = models.CharField(
+        verbose_name='кол-во звезд',
+        choices=CHOICES,
+        max_length=1,
+        default='5'
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name='пользователь'
+    )
+    description = models.TextField(verbose_name='описание')
+    data_create = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
 # @receiver(post_save, sender=CustomUser)
 # def create_profile(sender, instance, **kwargs):
 #     pass
