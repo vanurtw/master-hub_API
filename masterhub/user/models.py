@@ -118,7 +118,7 @@ class ProfileImages(models.Model):
     specialist = models.ForeignKey(
         Specialist,
         on_delete=models.CASCADE,
-        related_name='secialist_images',
+        related_name='profile_services',
         verbose_name='специалист',
         blank=True,
         null=True
