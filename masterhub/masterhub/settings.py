@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
     'service.apps.ServiceConfig',
+    'recording.apps.RecordingConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
