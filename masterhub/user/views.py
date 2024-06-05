@@ -64,6 +64,8 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin):
             serializer.save()
         return self.list(request)
 
+
+
 # class Test(APIView):
 #     def post(self, request):
 #         data = request.data

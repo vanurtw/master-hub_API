@@ -162,6 +162,9 @@ class Reviews(models.Model):
     data_create = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = 'отзыв'
+
 
 class Favorites(models.Model):
     user = models.ForeignKey(
@@ -177,6 +180,9 @@ class Favorites(models.Model):
         verbose_name='профиль мастера/студии'
     )
     date_create = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'избранное'
 
 # @receiver(post_save, sender=CustomUser)
 # def create_profile(sender, instance, **kwargs):
