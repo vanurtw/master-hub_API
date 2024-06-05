@@ -83,7 +83,7 @@ class ProfileMaster(models.Model):
         verbose_name_plural = 'Профили мастеров/студий'
 
     def __str__(self):
-        return f'profile_{self.user}'
+        return f'profile_{self.user}_{self.specialization}'
 
 
 class Specialist(models.Model):
@@ -104,6 +104,8 @@ class Specialist(models.Model):
         blank=True,
         null=True
     )
+    def __str__(self):
+        return f'specialist_{self.profile}'
 
 
 class ProfileImages(models.Model):
