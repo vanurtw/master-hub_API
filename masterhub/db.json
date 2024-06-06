@@ -442,6 +442,71 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2024-06-05T09:51:04.577Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "WorkTime object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2024-06-05T09:51:24.033Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "WorkTime object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Monday\", \"Wednesday\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2024-06-05T09:51:34.232Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "WorkTime object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Monday\", \"Wednesday\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2024-06-05T10:04:22.710Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "1",
+    "object_repr": "Recording object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2024-06-05T10:04:33.826Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "WorkTime object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u041f\\u0440\\u043e\\u0444\\u0438\\u043b\\u044c\"]}}]"
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -982,6 +1047,78 @@
   }
 },
 {
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add рабочее время мастера/студии",
+    "content_type": 16,
+    "codename": "add_worktime"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change рабочее время мастера/студии",
+    "content_type": 16,
+    "codename": "change_worktime"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete рабочее время мастера/студии",
+    "content_type": 16,
+    "codename": "delete_worktime"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view рабочее время мастера/студии",
+    "content_type": 16,
+    "codename": "view_worktime"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add запись",
+    "content_type": 17,
+    "codename": "add_recording"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change запись",
+    "content_type": 17,
+    "codename": "change_recording"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete запись",
+    "content_type": 17,
+    "codename": "delete_recording"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view запись",
+    "content_type": 17,
+    "codename": "view_recording"
+  }
+},
+{
   "model": "contenttypes.contenttype",
   "pk": 1,
   "fields": {
@@ -1099,6 +1236,22 @@
   "fields": {
     "app_label": "user",
     "model": "favorites"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "recording",
+    "model": "worktime"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "recording",
+    "model": "recording"
   }
 },
 {
@@ -1350,6 +1503,31 @@
     "photo": "static/media/service/user/images.jpg",
     "category": 3,
     "date_creation": "2024-05-30"
+  }
+},
+{
+  "model": "recording.worktime",
+  "pk": 1,
+  "fields": {
+    "profile": 1,
+    "monday": "08:00-17:00",
+    "tuesday": "",
+    "wednesday": "08:00-17:00",
+    "thursday": "",
+    "friday": "",
+    "saturday": "",
+    "sunday": ""
+  }
+},
+{
+  "model": "recording.recording",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "profile_master": 1,
+    "specialist": null,
+    "time_start": "10:04:21",
+    "time_end": null
   }
 },
 {
