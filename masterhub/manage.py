@@ -19,4 +19,8 @@ def main():
 
 
 if __name__ == '__main__':
+    # Применение фикстур для БД
+
+    # python manage.py loaddata 'db.json' - -exclude contenttypes
+
     main()
