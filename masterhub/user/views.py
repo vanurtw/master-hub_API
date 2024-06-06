@@ -6,12 +6,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
 from .models import CustomUser, ProfileMaster, ProfileImages
 from rest_framework.decorators import action
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin
 from rest_framework.views import APIView
 from .models import Favorites
 from rest_framework.generics import GenericAPIView
 from service.serializers import ProfileCatalogSerialize
 from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -42,7 +43,7 @@ class UsersViewSet(GenericViewSet, RetrieveModelMixin):
         return ProfileMaster.objects.all()
 
 
-class FavoritesViewSet(GenericViewSet, ListModelMixin):
+class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
     serializer_class = ProfileCatalogSerialize
     permission_classes = [permissions.IsAuthenticated]
 
@@ -64,7 +65,11 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin):
             serializer.save()
         return self.list(request)
 
-
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        favorite = get_object_or_404(Favorites, pk=pk)
+        favorite.delete()
+        return Response({'detail': 'removed from favorites'})
 
 # class Test(APIView):
 #     def post(self, request):

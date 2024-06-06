@@ -66,8 +66,16 @@ class Recording(models.Model):
         blank=True,
         null=True
     )
+    date = models.DateField(verbose_name='дата записи')
     time_start = models.TimeField()
-    time_end = models.TimeField(blank=True, null=True)
+    time_end = models.TimeField(
+        blank=True,
+        null=True
+    )
+    date_create = models.DateTimeField(
+        verbose_name='дата создания записи',
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name = 'запись'
