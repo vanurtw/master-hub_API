@@ -67,7 +67,7 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
 
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        favorite = get_object_or_404(Favorites, pk=pk)
+        favorite = get_object_or_404(Favorites, user=request.user, profile_id=pk)
         favorite.delete()
         return Response({'detail': 'removed from favorites'})
 
