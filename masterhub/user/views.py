@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
 from .models import CustomUser, ProfileMaster, ProfileImages
 from rest_framework.decorators import action
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin
 from rest_framework.views import APIView
 from .models import Favorites
 from rest_framework.generics import GenericAPIView
