@@ -4,6 +4,10 @@ from user.models import ProfileMaster
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.photo.url
     class Meta:
         model = Categories
         fields = ['id', 'title', 'photo']
@@ -11,12 +15,16 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
 class ProfileCatalogSerialize(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.photo.url
 
     def get_reviews(self, obj):
         queryset = [i.get_rating_star_display() for i in obj.reviews_profile.all()]
         len_queryset = len(queryset)
-        if len_queryset==0:
-            average_rating = 0
+        if len_queryset == 0:
+            average_rating = 'нет отзывов'
         else:
             average_rating = round(sum(queryset) / len_queryset, 2)
         data = {
@@ -27,4 +35,4 @@ class ProfileCatalogSerialize(serializers.ModelSerializer):
 
     class Meta:
         model = ProfileMaster
-        fields = ['id', 'name', 'address', 'specialization', 'reviews']
+        fields = ['id', 'name', 'photo', 'address', 'specialization', 'reviews']

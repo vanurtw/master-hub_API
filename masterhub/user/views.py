@@ -57,10 +57,10 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
     def create(self, request, *args, **kwargs):
         profile_master_id = request.GET.get('id')
         if not profile_master_id:
-            return Response({'a': 'wd'})
+            return Response({'error': 'wrong ID'}, status=status.HTTP_400_BAD_REQUEST)
         flag = Favorites.objects.filter(user=request.user, profile__id=profile_master_id)
         if flag.exists():
-            return Response({'error': 'podpisan'})
+            return Response({'error': 'already signed'}, status=status.HTTP_400_BAD_REQUEST)
         data = {'user': request.user.id, 'profile': profile_master_id}
         serializer = FavoritesSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
@@ -71,7 +71,7 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
         pk = kwargs.get('pk')
         favorite = get_object_or_404(Favorites, user=request.user, profile_id=pk)
         favorite.delete()
-        return Response({'detail': 'removed from favorites'})
+        return self.list(request)
 
 
 class FeedbackAPIView(GenericAPIView):
