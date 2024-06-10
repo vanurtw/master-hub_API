@@ -14,6 +14,7 @@ from rest_framework.generics import GenericAPIView
 from service.serializers import ProfileCatalogSerialize
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 
 # Create your views here.
@@ -80,8 +81,8 @@ class FeedbackAPIView(GenericAPIView):
         serializer = FeedbackSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, profile=profile)
-            return Response({'s': 's'})
-        return Response({'a': 'a'})
+            return Response({'detail': 'comment created'}, status=status.HTTP_201_CREATED)
+        return Response({'detail': 'error'}, status=status.HTTP_400_BAD_REQUEST)
 
 # class Test(APIView):
 #     def post(self, request):
