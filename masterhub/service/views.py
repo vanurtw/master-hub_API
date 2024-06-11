@@ -8,6 +8,8 @@ from rest_framework.mixins import ListModelMixin
 from user.models import ProfileMaster
 from django_filters.rest_framework import DjangoFilterBackend
 from user.filter import ProfileFilter
+from user.pagination import CatalogPagination
+
 
 # Create your views here.
 
@@ -20,12 +22,16 @@ class CategoriesAPIView(GenericAPIView, ListModelMixin):
         return self.list(request)
 
 
+
+
 class CatalogAPIView(GenericAPIView, ListModelMixin):
     serializer_class = ProfileCatalogSerialize
     queryset = ProfileMaster.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['categories', 'specialization']
     # filterset_class = ProfileFilter
+    pagination_class = CatalogPagination
+
     def get(self, request):
         return self.list(request)
 
