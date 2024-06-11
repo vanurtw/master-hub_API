@@ -7,7 +7,7 @@ from .models import Service, Categories
 from rest_framework.mixins import ListModelMixin
 from user.models import ProfileMaster
 from django_filters.rest_framework import DjangoFilterBackend
-
+from user.filter import ProfileFilter
 
 # Create your views here.
 
@@ -24,10 +24,9 @@ class CatalogAPIView(GenericAPIView, ListModelMixin):
     serializer_class = ProfileCatalogSerialize
     queryset = ProfileMaster.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['categories']
-
+    filterset_fields = ['categories', 'specialization']
+    # filterset_class = ProfileFilter
     def get(self, request):
         return self.list(request)
 
     # def get_queryset(self):
-
