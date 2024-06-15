@@ -7,9 +7,10 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from user.models import ProfileMaster, Specialist
+from .models import WorkTime
 from user.serializers import SpecialistSerializer
 from service.models import Service, Categories
-from .serializers import ServicesSerializer, ServicesRecordingSerializer
+from .serializers import ServicesSerializer, ServicesRecordingSerializer, WorkTimeSerializer
 from rest_framework.mixins import RetrieveModelMixin
 
 
@@ -37,17 +38,13 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
         serializer = ServicesRecordingSerializer(queryset, many=True, context={'services': services})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, url_path='(?P<id_services>[^/.]+)')
+    @action(methods=['get'], detail=True, url_path='(?P<id_specialist>[^/.]+)')
+    # '(?P<id_services>[^/.]+)'
     def recording(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        pk_services = kwargs.get('id_services')
-        services = Service.objects.get(id=pk_services)
-        qs = []
-        specialists = Specialist.objects.filter(profile__id=pk)
-        for i in specialists:
-            if i.specialist_services.all().filter(title=services.title):
-                qs.append(i)
-        serializer = SpecialistSerializer(qs, many=True)
+        pk = kwargs.get('id_specialist')
+        profile_work_time = WorkTime.objects.get(profile__pk=pk)
+        # services_time
+        serializer = WorkTimeSerializer(profile_work_time, context={'request': request})
         return Response(serializer.data)
 
     # @action(methods=['get'], detail=True)
