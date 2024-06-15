@@ -2,7 +2,7 @@ from rest_framework import serializers
 from user.models import ProfileMaster, Specialist
 from service.models import Service
 from user.models import ProfileMaster
-from .models import WorkTime
+from .models import WorkTime, Recording
 from datetime import datetime, time
 
 
@@ -30,7 +30,7 @@ class ServicesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'title', 'description', 'price', 'photo', 'category', 'specialist']
+        fields = ['id', 'title', 'description', 'price', 'photo', 'time', 'category', 'specialist', ]
 
 
 class ServicesRecordingSerializer(serializers.Serializer):
@@ -53,15 +53,26 @@ class WorkTimeSerializer(serializers.ModelSerializer):
 
     def get_time(self, obj):
         request = self.context.get('request')
+        kwargs = self.context.get('kwargs')
         result = []
-        services_time = time(hour=1, minute=30)
-        # time_service = request.GET.get('time-service')
         date_now = datetime.now()
+        services = Service.objects.get(id=kwargs.get('pk'))
+        services_datetime = date_now.replace(hour=services.time.hour, minute=services.time.minute)
         date_day = date_now.strftime('%A').lower()
         work_time_day = getattr(obj, date_day).split('-')
-        work_start = datetime.strptime(work_time_day[0], '%H:%M').time()
-        work_end = datetime.strptime(work_time_day[1], '%H:%M').time()
-        pass
+        work_start = datetime.strptime(work_time_day[0], '%H:%M')
+        work_end = datetime.strptime(work_time_day[1], '%H:%M')
+        recordings = Recording.objects.filter(profile_master__id=kwargs.get('id_specialist'), date=date_now).values(
+            'time_start', 'time_end')
+        while work_start < work_end:
+            flag = True
+            for i in recordings:
+                datetime_start = date_now.replace(hour=i['time_start'].hour, minute=i['time_start'].minute)
+                datetime_end = date_now.replace(hour=i['time_end'].hour, minute=i['time_end'].minute)
+                if work_start + services_datetime >= datetime_start:
+                    flag = False
+                    work_start = work_end.replace()
+                pass
 
     class Meta:
         model = WorkTime

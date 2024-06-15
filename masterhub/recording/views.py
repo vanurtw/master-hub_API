@@ -44,7 +44,8 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
         pk = kwargs.get('id_specialist')
         profile_work_time = WorkTime.objects.get(profile__pk=pk)
         # services_time
-        serializer = WorkTimeSerializer(profile_work_time, context={'request': request})
+
+        serializer = WorkTimeSerializer(profile_work_time, context={'request': request, 'kwargs': kwargs})
         return Response(serializer.data)
 
     # @action(methods=['get'], detail=True)
