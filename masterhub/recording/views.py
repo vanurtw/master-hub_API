@@ -22,13 +22,14 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
         pk = kwargs.get('pk')
         queryset = []
         profile = ProfileMaster.objects.get(id=pk)
-        if profile.specialization == 'master':
-            services = Service.objects.filter(profile=profile)
-        else:
-            services = Service.objects.none()
-            specialists = profile.profile_specialist.all()
-            for i in specialists:
-                services = services.union(i.specialist_services.all())
+        # if profile.specialization == 'master':
+        #     services = Service.objects.filter(profile=profile)
+        # else:
+        #     services = Service.objects.none()
+        #     specialists = profile.profile_specialist.all()
+        #     for i in specialists:
+        #         services = services.union(i.specialist_services.all())
+        services = Service.objects.filter(profile=profile)
         for i in services:
             if i.category not in queryset:
                 queryset.append(i.category)
