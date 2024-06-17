@@ -7,7 +7,15 @@ class WorkTime(models.Model):
     profile = models.ForeignKey(
         ProfileMaster,
         on_delete=models.CASCADE,
-        verbose_name='профиль'
+        verbose_name='профиль',
+         blank=True,
+        null=True
+    )
+    specialist = models.ForeignKey(
+        Specialist,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     monday = models.CharField(
         max_length=255,

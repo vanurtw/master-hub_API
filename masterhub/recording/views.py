@@ -39,10 +39,14 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
         return Response(serializer.data)
 
     @action(methods=['get'], detail=True, url_path='(?P<id_specialist>[^/.]+)')
-    # '(?P<id_services>[^/.]+)'
     def recording(self, request, *args, **kwargs):
+        '''если профиль мастера то передать параметром specialization'''
         pk = kwargs.get('id_specialist')
-        profile_work_time = WorkTime.objects.get(profile__pk=pk)
+        param = request.GET.get('specialization', None)
+        if param:
+            profile_work_time = WorkTime.objects.get(profile__pk=pk)
+        else:
+            profile_work_time = WorkTime.objects.get(specialist__pk=pk)
         # services_time
 
         serializer = WorkTimeSerializer(profile_work_time, context={'request': request, 'kwargs': kwargs})
