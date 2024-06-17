@@ -1,4 +1,7 @@
+import datetime
+
 from django.shortcuts import render
+from django.utils import timezone
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
@@ -7,16 +10,17 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from user.models import ProfileMaster, Specialist
-from .models import WorkTime
+from .models import WorkTime, Recording
 from user.serializers import SpecialistSerializer
 from service.models import Service, Categories
 from .serializers import ServicesSerializer, ServicesRecordingSerializer, WorkTimeSerializer
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
+from datetime import timedelta, date
 
 
 # Create your views here.
 
-class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
+class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
     permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
@@ -37,6 +41,32 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin):
         # serializer = ServicesSerializer(services, many=True)
         serializer = ServicesRecordingSerializer(queryset, many=True, context={'services': services})
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        service = Service.objects.get(id=data['service'])
+        time_start_request = data['time_start'].split(':')
+        time_start = timedelta(
+            hours=int(time_start_request[0]),
+            minutes=int(time_start_request[1])
+        )
+        service_time = timedelta(hours=service.time.hour, minutes=service.time.minute)
+        time_end = time_start + service_time
+        date = datetime.datetime.strptime(data['date'], '%Y-%m-%d')
+        recording = Recording()
+        recording.user = request.user
+        recording.service = service
+        recording.date = timezone.now()
+        recording.time_start = str(time_start)
+        recording.time_end = str(time_end)
+        if request.GET.get('master'):
+            profile = ProfileMaster.objects.get(id=data['id'])
+            recording.profile_master = profile
+        else:
+            spec = Specialist.objects.get(id=data['id'])
+            recording.specialist = spec
+        recording.save()
+        return Response({'a': 'wdwdwd'})
 
     @action(methods=['get'], detail=True, url_path='(?P<id_specialist>[^/.]+)')
     def recording(self, request, *args, **kwargs):
