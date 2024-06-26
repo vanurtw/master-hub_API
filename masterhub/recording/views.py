@@ -89,11 +89,10 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         '''если профиль мастера то передать параметром specialization'''
         pk_service = kwargs.get('id_services')
         pk_profile = kwargs.get('pk')
-        service = Service.objects.get(id=pk_service)
+        service = Service.objects.get(id=pk_service).select_related('specialist')
         param = service.profile.specialization
         if param == 'master':
-            pass
-            # profile_work_time = WorkTime.objects.get(profile__pk=pk)
+            profile_work_time = WorkTime.objects.get(profile__pk=pk_profile)
         else:
             profile_work_time = WorkTime.objects.get(specialist__pk=service.specialist.pk)
         # services_time

@@ -72,7 +72,7 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         work_end_datetime = datetime.strptime(work_time_day[1], '%H:%M')
         work_end = timedelta(hours=work_end_datetime.hour,
                              minutes=work_end_datetime.minute)  # время конца работы мастера
-        if kwargs.get('param') == 'master':
+        if self.context.get('param') == 'master':
             recordings = Recording.objects.filter(profile_master__id=kwargs.get('pk'), date=date_now).values(
                 'time_start', 'time_end')
         else:
