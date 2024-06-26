@@ -46,9 +46,14 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        # data {
+        # 'profile' : id профиля,
+        # 'service' : id услуги,
+        # 'time':'',
+        # }
         data = request.data
         service = Service.objects.get(id=data['service'])
-        time_start_request = data['time_start'].split(':')
+        time_start_request = data['time'].split(':')
         time_start = timedelta(
             hours=int(time_start_request[0]),
             minutes=int(time_start_request[1])
