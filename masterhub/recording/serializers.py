@@ -43,7 +43,8 @@ class ServicesRecordingSerializer(serializers.Serializer):
         if cat_id not in self.categories:
             self.categories.append(cat_id)
             services_context = self.context.get('services')
-            services = services_context.filter(category__id=cat_id)
+            services = services_context.filter(category__id=cat_id).select_related('category').select_related(
+                'specialist').select_related('profile')
             serializer = ServicesSerializer(services, many=True)
             return {instance.title: serializer.data}
 
@@ -84,11 +85,11 @@ class WorkTimeSerializer(serializers.ModelSerializer):
                     result.append(work_start)
                     work_start += timedelta(minutes=30)
                 else:
-                    if work_start>datetime_end:
+                    if work_start > datetime_end:
                         result.append(work_start)
                         work_start += timedelta(minutes=30)
                     else:
-                        work_start=datetime_end + timedelta(minutes=30)
+                        work_start = datetime_end + timedelta(minutes=30)
             result.append(work_start)
             work_start += timedelta(minutes=30)
         return TimeSerializer(result, many=True).data

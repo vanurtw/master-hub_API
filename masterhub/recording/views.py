@@ -21,9 +21,11 @@ from datetime import timedelta, date
 # Create your views here.
 
 class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    queryset = []
 
     def retrieve(self, request, *args, **kwargs):
+        # pk профиля
         pk = kwargs.get('pk')
         queryset = []
         profile = ProfileMaster.objects.get(id=pk)
@@ -34,7 +36,7 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         #     specialists = profile.profile_specialist.all()
         #     for i in specialists:
         #         services = services.union(i.specialist_services.all())
-        services = Service.objects.filter(profile=profile)
+        services = Service.objects.filter(profile=profile).select_related('category').select_related('specialist')
         for i in services:
             if i.category not in queryset:
                 queryset.append(i.category)
