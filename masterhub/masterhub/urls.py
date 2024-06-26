@@ -29,8 +29,10 @@ urlpatterns = [
     # re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^api/auth/', include('djoser.urls.authtoken')),
 
+
 ]
 
 urlpatterns += urlpatterns_swagger
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += path("__debug__/", include("debug_toolbar.urls")),

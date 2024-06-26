@@ -56,7 +56,7 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if not user.is_authenticated:
             return False
-        return 'aw'
+        return user.favorites_user.filter(profile=ob).exists()
 
     def get_images_work(self, obj):
         specialization = obj.specialization
