@@ -22,6 +22,7 @@ from datetime import timedelta, date
 
 class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
     # permission_classes = [IsAuthenticated]
+
     queryset = []
 
     def retrieve(self, request, *args, **kwargs):
@@ -70,18 +71,40 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         recording.save()
         return Response({'a': 'wdwdwd'})
 
-    @action(methods=['get'], detail=True, url_path='(?P<id_specialist>[^/.]+)')
+    # @action(methods=['get'], detail=True, url_path='(?P<id_specialist>[^/.]+)')
+    # def recording(self, request, *args, **kwargs):
+    #     '''если профиль мастера то передать параметром specialization'''
+    #     pk = kwargs.get('id_specialist')
+    #     param = request.GET.get('specialization', None)
+    #     if param:
+    #         profile_work_time = WorkTime.objects.get(profile__pk=pk)
+    #     else:
+    #         profile_work_time = WorkTime.objects.get(specialist__pk=pk)
+    #     # services_time
+    #
+    #     serializer = WorkTimeSerializer(profile_work_time, context={'request': request, 'kwargs': kwargs})
+    #     return Response(serializer.data)
+    @action(methods=['get'], detail=True, url_path='(?P<id_services>[^/.]+)')
     def recording(self, request, *args, **kwargs):
         '''если профиль мастера то передать параметром specialization'''
-        pk = kwargs.get('id_specialist')
-        param = request.GET.get('specialization', None)
-        if param:
-            profile_work_time = WorkTime.objects.get(profile__pk=pk)
+        pk_service = kwargs.get('id_services')
+        pk_profile = kwargs.get('pk')
+        service = Service.objects.get(id=pk_service)
+        param = service.profile.specialization
+        if param == 'master':
+            pass
+            # profile_work_time = WorkTime.objects.get(profile__pk=pk)
         else:
-            profile_work_time = WorkTime.objects.get(specialist__pk=pk)
+            profile_work_time = WorkTime.objects.get(specialist__pk=service.specialist.pk)
         # services_time
 
-        serializer = WorkTimeSerializer(profile_work_time, context={'request': request, 'kwargs': kwargs})
+        serializer = WorkTimeSerializer(profile_work_time,
+                                        context={
+                                            'request': request,
+                                            'kwargs': kwargs,
+                                            'service': service,
+                                            'param': param
+                                        })
         return Response(serializer.data)
 
     # @action(methods=['get'], detail=True)
