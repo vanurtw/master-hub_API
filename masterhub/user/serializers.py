@@ -38,6 +38,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 class ReviewsSerializer(serializers.ModelSerializer):
     user_id = serializers.CharField(source='user.id')
     user_name = serializers.CharField(source='user.username')
+    data_create = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
 
     class Meta:
         model = Reviews
