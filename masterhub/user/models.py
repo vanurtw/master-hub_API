@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
+
+
 # from service.models import Categories
 
 # Create your models here.
@@ -16,8 +18,8 @@ def upload_photo_profile_services(instance, filename):
 def upload_photo_profile(instance, filename):
     return f'{settings.BASE_DIR}/static/media/profile/{instance.user}/{filename}'
 
-
-
+def upload_photo_user(instance, filename):
+    return f'{settings.BASE_DIR}/static/media/users/{instance.username}/{filename}'
 class Categories(models.Model):
     """Модель категорий."""
 
@@ -41,6 +43,7 @@ class Categories(models.Model):
     def __str__(self):
         return f'category_{self.title}'
 
+
 class CustomUser(AbstractUser):
     """Модель юзера"""
 
@@ -52,6 +55,11 @@ class CustomUser(AbstractUser):
     email = models.EmailField(
         verbose_name='почта',
         unique=True
+    )
+    photo = models.ImageField(
+        upload_to=upload_photo_user,
+        verbose_name='аватарка',
+        default='media/users/default.jpg'
     )
 
 
