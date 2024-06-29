@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from .pagination import CatalogPagination
 from .serializers import CustomUserSerializer, ProfileMasterSerializer, FavoritesSerializer, FeedbackSerializer, \
     ReviewsSerializer, ServiceSerializer
 from rest_framework.authtoken.models import Token
@@ -11,7 +13,7 @@ from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, \
     DestroyModelMixin
 from rest_framework.views import APIView
-from .models import Favorites
+from .models import Favorites, Reviews
 from rest_framework.generics import GenericAPIView
 from service.serializers import ProfileCatalogSerialize
 from rest_framework import permissions
@@ -68,7 +70,7 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         profile = ProfileMaster.objects.get(id=profile_master_id)
-        serializer_profile = ProfileMasterSerializer(profile, context={'request':request})
+        serializer_profile = ProfileMasterSerializer(profile, context={'request': request})
         return Response(serializer_profile.data)
 
     def destroy(self, request, *args, **kwargs):
@@ -96,7 +98,21 @@ class ServicesProfileAPIView(GenericAPIView, ListModelMixin):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
-        return Service.objects.all()
+        queryset = Service.objects.filter(profile__id=pk)
+        return queryset
+
+    def get(self, request, pk):
+        return self.list(request)
+
+
+class ReviewsProfileAPIView(GenericAPIView, ListModelMixin):
+    serializer_class = ReviewsSerializer
+    pagination_class = CatalogPagination
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        queryset = Reviews.objects.filter(profile__pk=pk)
+        return queryset
 
     def get(self, request, pk):
         return self.list(request)
