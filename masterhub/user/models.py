@@ -18,8 +18,15 @@ def upload_photo_profile_services(instance, filename):
 def upload_photo_profile(instance, filename):
     return f'{settings.BASE_DIR}/static/media/profile/{instance.user}/{filename}'
 
+
 def upload_photo_user(instance, filename):
     return f'{settings.BASE_DIR}/static/media/users/{instance.username}/{filename}'
+
+
+def upload_photo_specialist(instance, filename):
+    return f'{settings.BASE_DIR}/static/media/specialist/{instance.username}/{filename}'
+
+
 class Categories(models.Model):
     """Модель категорий."""
 
@@ -148,12 +155,20 @@ class Specialist(models.Model):
         blank=True,
         null=True
     )
+    photo = models.ImageField(
+        upload_to=upload_photo_specialist,
+        verbose_name='аватарка',
+        default='media/specialist/default.jpg'
+    )
 
     def __str__(self):
         return f'specialist_{self.profile}_{self.name}'
 
 
 class ProfileImages(models.Model):
+    '''
+    модель примеры работ
+    '''
     profile = models.ForeignKey(
         ProfileMaster,
         verbose_name='профиль',
@@ -181,6 +196,9 @@ class ProfileImages(models.Model):
 
 
 class Reviews(models.Model):
+    '''
+    модель отзывы
+    '''
     CHOICES = [
         ('1', 1),
         ('2', 2),
@@ -214,6 +232,9 @@ class Reviews(models.Model):
 
 
 class Favorites(models.Model):
+    '''
+    модель избранное
+    '''
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,

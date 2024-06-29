@@ -30,9 +30,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.photo.url
+
     class Meta:
         model = Specialist
-        fields = ['id', 'name', 'job', 'description']
+        fields = ['id', 'name', 'job', 'description', 'photo']
 
 
 class ReviewsSerializer(serializers.ModelSerializer):
@@ -149,3 +154,20 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'rating_star': {'required': True},
             'user': {'required': False}
         }
+
+
+class SpecialistDetailSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+    services = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.photo.url
+
+    def get_services(self, obj):
+        services = obj.specialist_services.all()
+        serializer = ServiceSerializer(services, many=True)
+        return serializer.data
+
+    class Meta:
+        model = Specialist
+        fields = ['id', 'name', 'job', 'description', 'photo', 'services']

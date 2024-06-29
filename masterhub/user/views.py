@@ -1,20 +1,14 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.response import Response
-
 from .pagination import CatalogPagination
 from .serializers import CustomUserSerializer, ProfileMasterSerializer, FavoritesSerializer, FeedbackSerializer, \
-    ReviewsSerializer, ServiceSerializer
+    ReviewsSerializer, SpecialistDetailSerializer
 from rest_framework.authtoken.models import Token
-from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
-from .models import CustomUser, ProfileMaster, ProfileImages
+from rest_framework.viewsets import GenericViewSet
+from .models import CustomUser, ProfileMaster, Specialist
 from service.models import Service
-from rest_framework.decorators import action
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, \
-    DestroyModelMixin
-from rest_framework.views import APIView
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, DestroyModelMixin
 from .models import Favorites, Reviews
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from service.serializers import ProfileCatalogSerialize
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
@@ -23,8 +17,6 @@ from recording.serializers import ServicesSerializer
 
 
 # Create your views here.
-
-
 class UsersViewSet(GenericViewSet, RetrieveModelMixin):
 
     def create(self, request, *args, **kwargs):
@@ -36,8 +28,6 @@ class UsersViewSet(GenericViewSet, RetrieveModelMixin):
             token = Token.objects.create(user=user)
             return Response({'auth_token': token.key})
 
-    # def retrieve(self, request, pk):
-    #     return Response({'a': 'wd'})
     def get_serializer_class(self):
         if self.action == 'create':
             return CustomUserSerializer
@@ -116,6 +106,11 @@ class ReviewsProfileAPIView(GenericAPIView, ListModelMixin):
 
     def get(self, request, pk):
         return self.list(request)
+
+
+class SpecialistAPIView(RetrieveAPIView):
+    serializer_class = SpecialistDetailSerializer
+    queryset = Specialist.objects.all()
 
 # class Test(APIView):
 #     def post(self, request):
