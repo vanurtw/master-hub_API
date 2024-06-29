@@ -67,7 +67,9 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
         serializer = FavoritesSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        return self.list(request)
+        profile = ProfileMaster.objects.get(id=profile_master_id)
+        serializer_profile = ProfileMasterSerializer(profile, context={'request':request})
+        return Response(serializer_profile.data)
 
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -97,8 +99,7 @@ class ServicesProfileAPIView(GenericAPIView, ListModelMixin):
         return Service.objects.all()
 
     def get(self, request, pk):
-        return  self.list(request)
-
+        return self.list(request)
 
 # class Test(APIView):
 #     def post(self, request):
