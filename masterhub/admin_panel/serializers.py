@@ -20,6 +20,7 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
             'link_vk',
             'link_tg',
             'description',
+            'specialization',
             'date_creation',
         ]
     
