@@ -1,6 +1,6 @@
 from user.models import ProfileMaster
 from rest_framework import serializers
-from user.models import Favorites, Categories
+from user.models import Favorites, Categories, Specialist
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -73,3 +73,14 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError({'categories': 'object not found'})
                 instance.categories.add(category)
         return self.save(**kwargs)
+
+
+class SpecialistAdminSerializer(serializers.ModelSerializer):
+    # photo = serializers.SerializerMethodField()
+    #
+    # def get_photo(self, obj):
+    #     return obj.photo.url
+
+    class Meta:
+        model = Specialist
+        fields = ['id', 'name', 'job', 'description', 'photo']
