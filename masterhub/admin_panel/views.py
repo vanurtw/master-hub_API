@@ -36,11 +36,12 @@ class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
                 return Response({'detail': 'already have a profile'})
         return Response({'detail': 'error'})
 
+
     def partial_update(self, request, *args, **kwargs):
         profile = get_object_or_404(ProfileMaster, id=kwargs.get('pk'))
         if profile.user != request.user:
             return Response({'detail': 'not your profile'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ProfileAdminSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.partial_save()
         return Response(serializer.data)
