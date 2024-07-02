@@ -70,3 +70,10 @@ class SpecialistsAdminViewSet(GenericViewSet):
         specialist = Specialist.objects.get(id=pk)
         serializer = SpecialistDetailSerializer(specialist)
         return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        specialist = Specialist.objects.get(id=kwargs.get('pk'))
+        serializer = SpecialistDetailSerializer(specialist, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
