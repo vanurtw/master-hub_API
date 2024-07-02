@@ -36,7 +36,6 @@ class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
                 return Response({'detail': 'already have a profile'})
         return Response({'detail': 'error'})
 
-
     def partial_update(self, request, *args, **kwargs):
         profile = get_object_or_404(ProfileMaster, id=kwargs.get('pk'))
         if profile.user != request.user:
@@ -45,3 +44,11 @@ class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
         serializer.is_valid(raise_exception=True)
         serializer.partial_save()
         return Response(serializer.data)
+
+    @action(methods=['post'], detail=False)
+    def add_image(self, request):
+        return Response({'a': 'a'})
+
+
+class SpecialistsAdminViewSet(GenericViewSet):
+    pass
