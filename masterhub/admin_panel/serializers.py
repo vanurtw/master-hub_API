@@ -22,7 +22,8 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
             'description',
             'specialization',
             'date_creation',
+            'categories'
         ]
-    
+        depth = 1
     def save(self, **kwargs):
         return super(ProfileAdminSerializer, self).save(**kwargs)
