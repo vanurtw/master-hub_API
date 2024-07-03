@@ -10,6 +10,8 @@ from .serializers import ServicesRecordingSerializer, WorkTimeSerializer, Record
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, ListModelMixin
 from datetime import timedelta
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import status
 
 
 # Create your views here.
@@ -73,22 +75,25 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
 
     @action(methods=['get'], detail=True, url_path='(?P<id_services>[^/.]+)')
     def recording(self, request, *args, **kwargs):
-        '''если профиль мастера то передать параметром specialization'''
         pk_service = kwargs.get('id_services')
         pk_profile = kwargs.get('pk')
         service = Service.objects.get(id=pk_service)
         param = service.profile.specialization
         if param == 'master':
-            profile_work_time = WorkTime.objects.get(profile__pk=pk_profile)
-        else:
-            profile_work_time = WorkTime.objects.get(specialist__pk=service.specialist.pk)
-        # services_time
+            try:
+                profile_work_time = WorkTime.objects.get(profile__pk=pk_profile)
+            except:
+                print('awdwadwawda')
+                return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                profile_work_time = WorkTime.objects.get(specialist__pk=service.specialist.pk)
+            # services_time
 
-        serializer = WorkTimeSerializer(profile_work_time,
-                                        context={
-                                            'request': request,
-                                            'kwargs': kwargs,
-                                            'service': service,
-                                            'param': param
-                                        })
-        return Response(serializer.data)
+            serializer = WorkTimeSerializer(profile_work_time,
+                                            context={
+                                                'request': request,
+                                                'kwargs': kwargs,
+                                                'service': service,
+                                                'param': param
+                                            })
+            return Response(serializer.data)
