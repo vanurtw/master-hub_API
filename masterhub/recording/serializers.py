@@ -62,7 +62,12 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         kwargs = self.context.get('kwargs')
         services = self.context.get('service')
         result = []
-        date_now = datetime.now()  # дата записи
+        date = request.GET.get('date', None)
+        if date:
+            date_now = datetime.strptime(date, '%d/%m/%Y')
+        else:
+            date_now = datetime.now()  # дата записи
+
         services_date = timedelta(hours=services.time.hour, minutes=services.time.minute)  # время оказания услуги
         date_day = date_now.strftime('%A').lower()
         work_time_day = getattr(obj, date_day).split('-')
