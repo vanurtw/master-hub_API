@@ -11,13 +11,13 @@ from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, ListMode
 from datetime import timedelta
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status
+from rest_framework import status, permissions
 
 
 # Create your views here.
 
 class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModelMixin, ListModelMixin):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ServicesRecordingSerializer
 
     def get_queryset(self):
@@ -82,18 +82,20 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         if param == 'master':
             try:
                 profile_work_time = WorkTime.objects.get(profile__pk=pk_profile)
-            except:
-                print('awdwadwawda')
+            except ObjectDoesNotExist:
                 return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
+        else:
+            try:
                 profile_work_time = WorkTime.objects.get(specialist__pk=service.specialist.pk)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
             # services_time
 
-            serializer = WorkTimeSerializer(profile_work_time,
-                                            context={
-                                                'request': request,
-                                                'kwargs': kwargs,
-                                                'service': service,
-                                                'param': param
-                                            })
-            return Response(serializer.data)
+        serializer = WorkTimeSerializer(profile_work_time,
+                                        context={
+                                            'request': request,
+                                            'kwargs': kwargs,
+                                            'service': service,
+                                            'param': param
+                                        })
+        return Response(serializer.data)

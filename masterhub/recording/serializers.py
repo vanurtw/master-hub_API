@@ -66,6 +66,8 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         services_date = timedelta(hours=services.time.hour, minutes=services.time.minute)  # время оказания услуги
         date_day = date_now.strftime('%A').lower()
         work_time_day = getattr(obj, date_day).split('-')
+        if len(work_time_day) <= 1:
+            return 'no time'
         work_start_datetime = datetime.strptime(work_time_day[0], '%H:%M')
         work_start = timedelta(hours=work_start_datetime.hour,
                                minutes=work_start_datetime.minute)  # время начала работы мастера
@@ -79,7 +81,6 @@ class WorkTimeSerializer(serializers.ModelSerializer):
             recordings = Recording.objects.filter(specialist__id=services.specialist.id, date=date_now).values(
                 'time_start', 'time_end')
         while work_start < work_end:
-            print(work_start)
             flag = True
             for i in recordings:
                 datetime_start = timedelta(hours=i['time_start'].hour, minutes=i['time_start'].minute)
