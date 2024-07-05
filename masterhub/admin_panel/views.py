@@ -7,12 +7,11 @@ from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, Serv
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
 from user.serializers import ProfileMasterSerializer
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin, RetrieveModelMixin
 from django.db.utils import IntegrityError
 from user.models import ProfileMaster, Specialist
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from rest_framework.mixins import ListModelMixin
 from service.models import Service
 
 
@@ -82,7 +81,7 @@ class SpecialistsAdminViewSet(GenericViewSet):
         return Response(serializer.data)
 
 
-class ServicesAdminViewSet(GenericViewSet, ListModelMixin):
+class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -106,3 +105,9 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin):
 
     def list(self, request, *args, **kwargs):
         return super(ServicesAdminViewSet, self).list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        service = Service.objects.get(pk=pk)
+        serializer = ServicesAdminSerializer(service)
+        return Response(serializer.data)
