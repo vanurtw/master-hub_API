@@ -118,3 +118,11 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         service = Service.objects.get(pk=pk)
         serializer = ServicesAdminSerializer(service)
         return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        service = Service.objects.get(id=pk)
+        serializer = ServicesAdminSerializer(instance=service, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

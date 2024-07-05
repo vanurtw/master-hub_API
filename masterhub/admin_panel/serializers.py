@@ -1,14 +1,11 @@
+from recording.serializers import ProfileSerializer
+from user.serializers import SpecialistSerializer
 from user.models import ProfileMaster
 from rest_framework import serializers
 from user.models import Favorites, Categories, Specialist
 from django.core.exceptions import ObjectDoesNotExist
 from service.models import Service
-
-
-class CategoriesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Categories
-        fields = ['id', 'title']
+from service.serializers import CategoriesSerializer
 
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
@@ -88,10 +85,19 @@ class SpecialistAdminSerializer(serializers.ModelSerializer):
 
 
 class ServicesAdminSerializer(serializers.ModelSerializer):
+    category = CategoriesSerializer()
+    specialist = serializers.SerializerMethodField()
+
+    def get_specialist(self, obj):
+        if obj.specialist:
+            serializer = SpecialistSerializer(obj.specialist)
+        else:
+            serializer = ProfileSerializer(obj.profile)
+        return serializer.data
+
     class Meta:
         model = Service
         fields = ['id', 'title', 'description', 'price', 'time', 'photo', 'category', 'date_creation', 'specialist']
-        depth = 1
 
 
 class ServiceSpecAdminSerializer(serializers.Serializer):
