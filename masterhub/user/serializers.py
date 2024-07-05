@@ -26,7 +26,7 @@ class ProfileImagesSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ['title', 'description', 'price', 'photo', 'time']
+        fields = ['id', 'title', 'description', 'price', 'photo', 'time']
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
