@@ -13,6 +13,7 @@ from user.models import ProfileMaster, Specialist
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from service.models import Service
+from service.serializers import CategoriesSerializer
 
 
 class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
@@ -51,6 +52,12 @@ class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
     @action(methods=['post'], detail=False)
     def add_image(self, request):
         return Response({'a': 'a'})
+
+    @action(methods=['get'], detail=False)
+    def categories(self, request):
+        profile = request.user.user_profile
+        serializer = CategoriesSerializer(profile.categories, many=True)
+        return Response(serializer.data)
 
 
 class SpecialistsAdminViewSet(GenericViewSet):
