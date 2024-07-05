@@ -2,7 +2,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet, ViewSetMixin, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer
+from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, ServicesAdminSerializer
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
 from user.serializers import ProfileMasterSerializer
@@ -11,6 +11,8 @@ from django.db.utils import IntegrityError
 from user.models import ProfileMaster, Specialist
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework.mixins import ListModelMixin
+from service.models import Service
 
 
 class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
@@ -77,3 +79,14 @@ class SpecialistsAdminViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class ServicesAdminViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = ServicesAdminSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        pass
+
+    def list(self, request, *args, **kwargs):
+        return super(ServicesAdminViewSet, self).list(request, *args, **kwargs)

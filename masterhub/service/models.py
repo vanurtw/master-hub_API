@@ -51,6 +51,8 @@ class Service(models.Model):
     photo = models.ImageField(
         verbose_name='изображение',
         upload_to=upload_photo_service,
+        blank=True,
+        null=True
     )
     category = models.ForeignKey(
         Categories,
