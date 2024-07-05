@@ -92,3 +92,14 @@ class ServicesAdminSerializer(serializers.ModelSerializer):
         model = Service
         fields = ['id', 'title', 'description', 'price', 'time', 'photo', 'category', 'date_creation', 'specialist']
         depth = 1
+
+
+class ServiceSpecAdminSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        if self.context.get('profile'):
+            services = value.profile_services.all()
+            serializer = ServicesAdminSerializer(services, many=True)
+        else:
+            services = value.specialist_services.all()
+            serializer = ServicesAdminSerializer(services, many=True)
+        return {value.name: serializer.data}

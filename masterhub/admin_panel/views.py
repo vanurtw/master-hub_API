@@ -2,7 +2,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet, ViewSetMixin, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, ServicesAdminSerializer
+from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, ServicesAdminSerializer, \
+    ServiceSpecAdminSerializer
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
 from user.serializers import ProfileMasterSerializer
@@ -82,11 +83,26 @@ class SpecialistsAdminViewSet(GenericViewSet):
 
 
 class ServicesAdminViewSet(GenericViewSet, ListModelMixin):
-    serializer_class = ServicesAdminSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        pass
+        profile = self.request.user.user_profile
+        if profile.specialization == 'master':
+            return [profile]
+        specialist = profile.profile_specialist.all()
+        return specialist
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ServiceSpecAdminSerializer
+        return ServicesAdminSerializer
+
+    def get_serializer_context(self):
+        context = super(ServicesAdminViewSet, self).get_serializer_context()
+        profile = self.request.user.user_profile
+        if profile.specialization == 'master':
+            context['profile'] = 'master'
+        return context
 
     def list(self, request, *args, **kwargs):
         return super(ServicesAdminViewSet, self).list(request, *args, **kwargs)
