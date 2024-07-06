@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Reviews, Favorites
 from rest_framework import serializers
 from service.models import Service
-
+from recording.serializers import ServicesSerializer
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,7 +89,7 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
             for specialist in obj.profile_specialist.all():
                 services = specialist.specialist_services.all()
                 queryset = queryset.union(services)
-        serializer = ServiceSerializer(queryset[:5], many=True)
+        serializer = ServicesSerializer(queryset[:5], many=True)
         return serializer.data
 
     def get_specialists(self, obj):
