@@ -159,6 +159,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
 class SpecialistDetailSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
+    images_work = serializers.SerializerMethodField()
 
     def get_photo(self, obj):
         return obj.photo.url
@@ -168,6 +169,11 @@ class SpecialistDetailSerializer(serializers.ModelSerializer):
         serializer = ServiceSerializer(services, many=True)
         return serializer.data
 
+    def get_images_work(self, obj):
+        queryset = obj.profile_services.all()
+        serializer = ProfileImagesSerializer(queryset, many=True)
+        return serializer.data
+
     class Meta:
         model = Specialist
-        fields = ['id', 'name', 'job', 'description', 'photo', 'services']
+        fields = ['id', 'name', 'job', 'description', 'photo', 'services', 'images_work']
