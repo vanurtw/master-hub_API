@@ -51,7 +51,9 @@ class ServicesRecordingSerializer(serializers.Serializer):
 
 class TimeSerializer(serializers.Serializer):
     def to_representation(self, instance: timedelta):
-        return str(instance)
+        hour = str(instance.seconds // 3600).rjust(2, '0')
+        minute = str((instance.seconds - int(hour) * 3600) // 60).rjust(2, '0')
+        return f'{hour}:{minute}'
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
