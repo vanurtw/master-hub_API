@@ -30,7 +30,8 @@ class ServicesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'title', 'description', 'price', 'photo', 'time', 'category', 'specialist', ]
+        fields = ['id', 'title', 'description', 'price', 'photo', 'time','date_creation', 'category', 'specialist', ]
+        depth = 1
 
 
 class ServicesRecordingSerializer(serializers.Serializer):

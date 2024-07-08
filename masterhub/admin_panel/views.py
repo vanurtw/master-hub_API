@@ -2,8 +2,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet, ViewSetMixin, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, ServicesAdminSerializer, \
+
+from recording.serializers import ServicesSerializer
+from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, \
     ServiceSpecAdminSerializer
+
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
 from user.serializers import ProfileMasterSerializer
@@ -16,7 +19,7 @@ from service.models import Service
 from service.serializers import CategoriesSerializer
 
 
-class ProfileAdminViewSet(GenericViewSet, CreateModelMixin):
+class ProfileAdminViewSet(GenericViewSet):
     serializer_class = ProfileAdminSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = ProfileMaster.objects.all()
@@ -88,7 +91,7 @@ class SpecialistsAdminViewSet(GenericViewSet):
         return Response(serializer.data)
 
 
-class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -101,7 +104,7 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     def get_serializer_class(self):
         if self.action == 'list':
             return ServiceSpecAdminSerializer
-        return ServicesAdminSerializer
+        return ServicesSerializer
 
     def get_serializer_context(self):
         context = super(ServicesAdminViewSet, self).get_serializer_context()
@@ -116,7 +119,7 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         service = Service.objects.get(pk=pk)
-        serializer = ServicesAdminSerializer(service)
+        serializer = ServicesSerializer(service)
         return Response(serializer.data)
 
     def partial_update(self, request, *args, **kwargs):
@@ -126,3 +129,6 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+    def create(self, *args, **kwargs):
+        return super(ServicesAdminViewSet, self).create(*args, **kwargs)

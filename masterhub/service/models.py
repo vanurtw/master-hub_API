@@ -33,7 +33,6 @@ class Service(models.Model):
     title = models.CharField(
         verbose_name='заголовок',
         max_length=255,
-        blank=True
     )
     description = models.TextField(
         verbose_name='описание',
@@ -45,8 +44,6 @@ class Service(models.Model):
     )
     time = models.TimeField(
         verbose_name='время процедуры',
-        blank=True,
-        null=True
     )
     photo = models.ImageField(
         verbose_name='изображение',

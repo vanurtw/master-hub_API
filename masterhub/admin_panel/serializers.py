@@ -1,4 +1,4 @@
-from recording.serializers import ProfileSerializer
+from recording.serializers import ProfileSerializer, ServicesSerializer
 from user.serializers import SpecialistSerializer
 from user.models import ProfileMaster
 from rest_framework import serializers
@@ -84,28 +84,15 @@ class SpecialistAdminSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'job', 'description', 'photo']
 
 
-class ServicesAdminSerializer(serializers.ModelSerializer):
-    category = CategoriesSerializer()
-    specialist = serializers.SerializerMethodField()
 
-    def get_specialist(self, obj):
-        if obj.specialist:
-            serializer = SpecialistSerializer(obj.specialist)
-        else:
-            serializer = ProfileSerializer(obj.profile)
-        return serializer.data
-
-    class Meta:
-        model = Service
-        fields = ['id', 'title', 'description', 'price', 'time', 'photo', 'category', 'date_creation', 'specialist']
 
 
 class ServiceSpecAdminSerializer(serializers.Serializer):
     def to_representation(self, value):
         if self.context.get('profile'):
             services = value.profile_services.all()
-            serializer = ServicesAdminSerializer(services, many=True)
+            serializer = ServicesSerializer(services, many=True)
         else:
             services = value.specialist_services.all()
-            serializer = ServicesAdminSerializer(services, many=True)
+            serializer = ServicesSerializer(services, many=True)
         return {value.name: serializer.data}
