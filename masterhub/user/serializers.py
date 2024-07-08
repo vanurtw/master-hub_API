@@ -4,6 +4,7 @@ from rest_framework import serializers
 from service.models import Service
 from recording.serializers import ServicesSerializer
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -55,12 +56,17 @@ class ReviewsSerializer(serializers.ModelSerializer):
 
 
 class ProfileMasterSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        self.services_count = 0
+        super(ProfileMasterSerializer, self).__init__(*args, **kwargs)
+
     images_work = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
     specialists = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     photo = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
+    services_count = serializers.SerializerMethodField()
 
     def get_is_favorite(self, ob):
         user = self.context.get('request').user
@@ -89,6 +95,7 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
             for specialist in obj.profile_specialist.all():
                 services = specialist.specialist_services.all()
                 queryset = queryset.union(services)
+        self.services_count = queryset.count()
         serializer = ServicesSerializer(queryset[:5], many=True)
         return serializer.data
 
@@ -118,6 +125,9 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
     def get_photo(self, obj):
         return obj.photo.url
 
+    def get_services_count(self, obj):
+        return self.services_count
+
     class Meta:
         model = ProfileMaster
         fields = [
@@ -135,6 +145,7 @@ class ProfileMasterSerializer(serializers.ModelSerializer):
             'specialists',
             'images_work',
             'services',
+            'services_count',
             'reviews'
         ]
 
