@@ -19,6 +19,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ServicesSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super(ServicesSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        if request and request.method == 'GET':
+            self.Meta.depth = 1
+
     specialist = serializers.SerializerMethodField()
 
     def get_specialist(self, obj):
@@ -30,8 +36,7 @@ class ServicesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'title', 'description', 'price', 'photo', 'time','date_creation', 'category', 'specialist', ]
-        depth = 1
+        fields = ['id', 'title', 'description', 'price', 'photo', 'time', 'date_creation', 'category', 'specialist', ]
 
 
 class ServicesRecordingSerializer(serializers.Serializer):

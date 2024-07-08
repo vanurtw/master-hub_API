@@ -84,9 +84,6 @@ class SpecialistAdminSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'job', 'description', 'photo']
 
 
-
-
-
 class ServiceSpecAdminSerializer(serializers.Serializer):
     def to_representation(self, value):
         if self.context.get('profile'):

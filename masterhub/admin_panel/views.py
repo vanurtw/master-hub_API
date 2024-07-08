@@ -125,10 +125,21 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, C
     def partial_update(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         service = Service.objects.get(id=pk)
-        serializer = ServicesAdminSerializer(instance=service, data=request.data, partial=True)
+        serializer = ServicesSerializer(instance=service, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
-    def create(self, *args, **kwargs):
-        return super(ServicesAdminViewSet, self).create(*args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        profile = request.user.user_profile
+        if profile.specialization == 'master':
+            serializer.save(profile=profile)
+        else:
+            specialist_id = request.data.get('specialist')
+            if specialist_id:
+                serializer.save(specialist_id=specialist_id)
+            else:
+                return Response({'detail': 'ID specialist has not '}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
