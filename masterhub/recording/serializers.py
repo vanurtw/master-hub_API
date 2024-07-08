@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from service.serializers import CategoriesSerializer
 from user.models import Specialist
 from service.models import Service
 from user.models import ProfileMaster
@@ -19,11 +21,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ServicesSerializer(serializers.ModelSerializer):
+    photo = serializers.ImageField(use_url=False)
+
     def __init__(self, *args, **kwargs):
         super(ServicesSerializer, self).__init__(*args, **kwargs)
         request = self.context.get('request')
         if request and request.method == 'GET':
-            self.Meta.depth = 1
+            self.fields['category'] = CategoriesSerializer()
 
     specialist = serializers.SerializerMethodField()
 
