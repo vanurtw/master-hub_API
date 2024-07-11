@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 
 from recording.serializers import ServicesSerializer
 from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, \
-    ServiceSpecAdminSerializer
+    ServiceSpecAdminSerializer, WorkTimeAdminSerializer
 
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
@@ -17,6 +17,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from service.models import Service
 from service.serializers import CategoriesSerializer
+from recording.models import WorkTime
 
 
 class ProfileAdminViewSet(GenericViewSet):
@@ -148,3 +149,13 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, C
             else:
                 return Response({'detail': 'ID specialist has not '}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class WorkTimeViewSet(GenericViewSet):
+    serializer_class = WorkTimeAdminSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        work_time = WorkTime.objects.get(id=5)
+        serializer = WorkTimeAdminSerializer(work_time)
+        return Response(serializer.data)

@@ -6,6 +6,7 @@ from service.models import Service
 from user.models import ProfileMaster
 from .models import WorkTime, Recording
 from datetime import datetime, timedelta
+from recording.models import WorkTime
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
@@ -136,3 +137,4 @@ class RecordingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recording
         fields = ['id', 'profile_master', 'service', 'date', 'time_start', 'time_end']
+

@@ -6,6 +6,7 @@ router = SimpleRouter()
 router.register('admin-panel/profile', views.ProfileAdminViewSet, basename='admin_panel_profile')
 router.register('admin-panel/specialists', views.SpecialistsAdminViewSet, basename='admin_panel_specialists')
 router.register('admin-panel/services', views.ServicesAdminViewSet, basename='admin_panel_services')
+router.register('admin-panel/work-time', views.WorkTimeViewSet, basename='admin_panel_work-time')
 
 urlpatterns = [
     path('', include(router.urls)),

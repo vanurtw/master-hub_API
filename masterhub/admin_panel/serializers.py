@@ -6,6 +6,7 @@ from user.models import Favorites, Categories, Specialist
 from django.core.exceptions import ObjectDoesNotExist
 from service.models import Service
 from service.serializers import CategoriesSerializer
+from recording.models import WorkTime
 
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
@@ -92,3 +93,9 @@ class ServiceSpecAdminSerializer(serializers.Serializer):
             services = value.specialist_services.all()
         serializer = ServicesSerializer(services, many=True)
         return {value.name: serializer.data}
+
+
+class WorkTimeAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkTime
+        fields = '__all__'
