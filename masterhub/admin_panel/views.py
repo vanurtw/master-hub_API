@@ -111,9 +111,6 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, C
 
     def get_serializer_context(self):
         context = super(ServicesAdminViewSet, self).get_serializer_context()
-        profile = self.request.user.user_profile
-        if profile.specialization == 'master':
-            context['profile'] = 'master'
         return context
 
     def list(self, request, *args, **kwargs):
@@ -134,11 +131,16 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, C
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        data = request.data
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         profile = request.user.user_profile
         if profile.specialization == 'master':
-            serializer.save(profile=profile)
+            specialist_id = request.data.get('specialist')
+            if specialist_id:
+                serializer.save(specialist_id=specialist_id)
+            else:
+                serializer.save(profile=profile)
         else:
             specialist_id = request.data.get('specialist')
             if specialist_id:

@@ -86,10 +86,9 @@ class SpecialistAdminSerializer(serializers.ModelSerializer):
 
 class ServiceSpecAdminSerializer(serializers.Serializer):
     def to_representation(self, value):
-        if self.context.get('profile'):
+        if not hasattr(value, 'job'):
             services = value.profile_services.all()
-            serializer = ServicesSerializer(services, many=True)
         else:
             services = value.specialist_services.all()
-            serializer = ServicesSerializer(services, many=True)
+        serializer = ServicesSerializer(services, many=True)
         return {value.name: serializer.data}

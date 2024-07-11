@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ServicesSerializer(serializers.ModelSerializer):
-    photo = serializers.ImageField(use_url=False)
+    photo = serializers.ImageField(use_url=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super(ServicesSerializer, self).__init__(*args, **kwargs)
