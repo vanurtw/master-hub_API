@@ -97,7 +97,10 @@ class ServicesAdminViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, C
     def get_queryset(self):
         profile = self.request.user.user_profile
         if profile.specialization == 'master':
-            return [profile]
+            res = [profile]
+            for i in profile.profile_specialist.all():
+                res.append(i)
+            return res
         specialist = profile.profile_specialist.all()
         return specialist
 
