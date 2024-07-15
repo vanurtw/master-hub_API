@@ -7,6 +7,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from service.models import Service
 from service.serializers import CategoriesSerializer
 from recording.models import WorkTime
+from rest_framework.exceptions import ValidationError
+from datetime import datetime
 
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
@@ -96,6 +98,18 @@ class ServiceSpecAdminSerializer(serializers.Serializer):
 
 
 class WorkTimeAdminSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        val = list(attrs.values())[0].split('-')
+        if len(val) != 2:
+            raise ValidationError({'error': 'Не верный формат времени'})
+        for i in val:
+            try:
+                datetime.strptime(i, '%H:%M')
+            except:
+                raise ValidationError({'error': 'Не верный формат времени'})
+        return attrs
+
     class Meta:
         model = WorkTime
         fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']

@@ -161,4 +161,8 @@ class WorkTimeViewSet(GenericViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        pass
+        data = request.data
+        pk_specialist = data.get('id')
+        serializer = WorkTimeAdminSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
