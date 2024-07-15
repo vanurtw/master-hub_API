@@ -165,4 +165,9 @@ class WorkTimeViewSet(GenericViewSet):
         pk_specialist = data.get('id')
         serializer = WorkTimeAdminSerializer(data=data)
         serializer.is_valid(raise_exception=True)
+        if pk_specialist:
+            spec = get_object_or_404(Specialist, id=pk_specialist)
+            serializer.save(specialist=spec)
+        else:
+            serializer.save(profile=request.user.user_profile)
         return Response(serializer.data)
