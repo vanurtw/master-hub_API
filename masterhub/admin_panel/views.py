@@ -156,6 +156,9 @@ class WorkTimeViewSet(GenericViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        work_time = WorkTime.objects.get(id=5)
+        work_time = get_object_or_404(WorkTime, specialist__id=pk)
         serializer = WorkTimeAdminSerializer(work_time)
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        pass

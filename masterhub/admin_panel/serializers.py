@@ -98,4 +98,4 @@ class ServiceSpecAdminSerializer(serializers.Serializer):
 class WorkTimeAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTime
-        fields = '__all__'
+        fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']

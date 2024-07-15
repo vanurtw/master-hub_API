@@ -15,6 +15,7 @@ class WorkTime(models.Model):
     specialist = models.ForeignKey(
         Specialist,
         on_delete=models.CASCADE,
+        related_name='work_time',
         blank=True,
         null=True
     )
