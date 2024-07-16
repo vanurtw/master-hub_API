@@ -183,7 +183,9 @@ class ReviewsViewSet(GenericViewSet, ListModelMixin):
 
 
 class RecordingAdminViewSet(GenericViewSet):
+    serializer_class = RecordingAdminSerializer
+
     def list(self, request):
         recordings = request.user.user_profile.profile_recordings.all()
-        serializer = RecordingAdminSerializer(recordings, many=True)
+        serializer = self.get_serializer(recordings, many=True, context={'list': True})
         return Response(serializer.data)

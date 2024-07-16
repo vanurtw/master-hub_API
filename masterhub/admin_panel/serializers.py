@@ -116,7 +116,6 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
         fields = ['id', 'monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']
 
 
-
 class ReviewsAdminSerializer(serializers.ModelSerializer):
     user_id = serializers.CharField(source='user.id')
     user_name = serializers.CharField(source='user.username')
@@ -135,8 +134,10 @@ class RecordingAdminSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(RecordingAdminSerializer, self).__init__(*args, **kwargs)
-        c = 5
+        if self.context.get('list'):
+            del self.fields['']
 
     class Meta:
         model = Recording
-        fields = ['id', 'date', 'time_start', 'time_start']
+        fields = ['id', 'date', 'time_start', 'time_start', 'specialist', 'service', 'name', 'surname', 'surname',
+                  'phone']
