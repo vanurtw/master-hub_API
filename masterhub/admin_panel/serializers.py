@@ -9,6 +9,7 @@ from service.serializers import CategoriesSerializer
 from recording.models import WorkTime
 from rest_framework.exceptions import ValidationError
 from datetime import datetime
+from recording.models import Recording
 
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
@@ -128,3 +129,14 @@ class ReviewsAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews
         fields = ['id', 'user_id', 'user_name', 'rating_star', 'data_create', 'description', 'photo', 'active']
+
+
+class RecordingAdminSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(RecordingAdminSerializer, self).__init__(*args, **kwargs)
+        c = 5
+
+    class Meta:
+        model = Recording
+        fields = ['id', 'date', 'time_start', 'time_start']

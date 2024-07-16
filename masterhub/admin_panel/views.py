@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 
 from recording.serializers import ServicesSerializer
 from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, \
-    ServiceSpecAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
+    ServiceSpecAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer, RecordingAdminSerializer
 
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
@@ -180,3 +180,10 @@ class ReviewsViewSet(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         return self.request.user.user_profile.reviews_profile.all()
+
+
+class RecordingAdminViewSet(GenericViewSet):
+    def list(self, request):
+        recordings = request.user.user_profile.profile_recordings.all()
+        serializer = RecordingAdminSerializer(recordings, many=True)
+        return Response(serializer.data)
