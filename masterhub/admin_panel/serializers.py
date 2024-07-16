@@ -112,4 +112,4 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkTime
-        fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']
+        fields = ['id', 'monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']

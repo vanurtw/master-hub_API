@@ -171,3 +171,9 @@ class WorkTimeViewSet(GenericViewSet):
         else:
             serializer.save(profile=request.user.user_profile)
         return Response(serializer.data)
+
+
+class ReviewsViewSet(GenericViewSet):
+
+    def retrieve(self, request):
+        return Response({'a': 'a'})
