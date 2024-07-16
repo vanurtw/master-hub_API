@@ -1,6 +1,6 @@
 from recording.serializers import ProfileSerializer, ServicesSerializer
 from user.serializers import SpecialistSerializer
-from user.models import ProfileMaster
+from user.models import ProfileMaster, Reviews
 from rest_framework import serializers
 from user.models import Favorites, Categories, Specialist
 from django.core.exceptions import ObjectDoesNotExist
@@ -113,3 +113,18 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTime
         fields = ['id', 'monday', 'tuesday', 'wednesday', 'thursday', 'thursday', 'saturday', 'sunday']
+
+
+
+class ReviewsAdminSerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField(source='user.id')
+    user_name = serializers.CharField(source='user.username')
+    data_create = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.user.photo.url
+
+    class Meta:
+        model = Reviews
+        fields = ['id', 'user_id', 'user_name', 'rating_star', 'data_create', 'description', 'photo', 'active']

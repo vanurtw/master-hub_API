@@ -5,19 +5,20 @@ from rest_framework.decorators import action
 
 from recording.serializers import ServicesSerializer
 from .serializers import ProfileAdminSerializer, SpecialistAdminSerializer, \
-    ServiceSpecAdminSerializer, WorkTimeAdminSerializer
+    ServiceSpecAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
 
 from user.serializers import SpecialistDetailSerializer
 from rest_framework import permissions
 from user.serializers import ProfileMasterSerializer
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin, RetrieveModelMixin
 from django.db.utils import IntegrityError
-from user.models import ProfileMaster, Specialist
+from user.models import ProfileMaster, Specialist, Reviews
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from service.models import Service
 from service.serializers import CategoriesSerializer
 from recording.models import WorkTime
+from user.serializers import ReviewsSerializer
 
 
 class ProfileAdminViewSet(GenericViewSet):
@@ -173,7 +174,9 @@ class WorkTimeViewSet(GenericViewSet):
         return Response(serializer.data)
 
 
-class ReviewsViewSet(GenericViewSet):
+class ReviewsViewSet(GenericViewSet, ListModelMixin):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ReviewsAdminSerializer
 
-    def retrieve(self, request):
-        return Response({'a': 'a'})
+    def get_queryset(self):
+        return self.request.user.user_profile.reviews_profile.all()
