@@ -12,7 +12,7 @@ from datetime import timedelta
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, permissions
-
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -34,8 +34,8 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         # pk профиля
         pk = kwargs.get('pk')
         queryset = []
-        profile = ProfileMaster.objects.get(id=pk)
-        services = Service.objects.filter(profile=profile).select_related('category').select_related('specialist')
+        profile = get_object_or_404(ProfileMaster, id=pk)
+        services = Service.objects.filter(profile=profile).select_related('category', 'specialist')
         for i in services:
             if i.category not in queryset:
                 queryset.append(i.category)

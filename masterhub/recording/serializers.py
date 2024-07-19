@@ -54,8 +54,7 @@ class ServicesRecordingSerializer(serializers.Serializer):
         if cat_id not in self.categories:
             self.categories.append(cat_id)
             services_context = self.context.get('services')
-            services = services_context.filter(category__id=cat_id).select_related('category').select_related(
-                'specialist').select_related('profile')
+            services = services_context.filter(category__id=cat_id)
             serializer = ServicesSerializer(services, many=True)
             return {instance.title: serializer.data}
 
