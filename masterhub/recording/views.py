@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from user.models import ProfileMaster
 from .models import WorkTime, Recording
 from service.models import Service
-from .serializers import ServicesRecordingSerializer, WorkTimeSerializer, RecordingSerializer
+from .serializers import ServicesRecordingSerializer, WorkTimeSerializer, RecordingSerializer, RecordinCreateSerializer
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, ListModelMixin
 from datetime import timedelta
 from rest_framework import status
@@ -44,7 +44,6 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
 
     def create(self, request, *args, **kwargs):
         # {
-        #     "profile": id профиля,
         #     "time": "08:00",
         #     "date": "2024-05-12",
         #     "service": id услуги,
@@ -53,6 +52,8 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         #     "phone": phone,
         # }
         data = request.data
+        serializer = RecordinCreateSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
         service = Service.objects.get(id=data['service'])
         time_start_request = data['time'].split(':')
         time_start = timedelta(
@@ -73,7 +74,7 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         recording.time_end = str(time_end)
         profile = service.profile
         recording.profile_master = profile
-        if service.profile.specialization == 'studio':
+        if profile.specialization == 'studio':
             spec = service.specialist
             recording.specialist = spec
         recording.save()

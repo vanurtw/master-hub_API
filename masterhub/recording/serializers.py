@@ -138,3 +138,11 @@ class RecordingSerializer(serializers.ModelSerializer):
         model = Recording
         fields = ['id', 'profile_master', 'service', 'date', 'time_start', 'time_end']
 
+
+class RecordinCreateSerializer(serializers.Serializer):
+    time = serializers.TimeField(format='%H:%M')
+    date = serializers.DateField(format='%Y-%m-%d')
+    service = serializers.PrimaryKeyRelatedField(queryset=Service.objects.all())
+    name = serializers.CharField(max_length=30)
+    surname = serializers.CharField(max_length=30)
+    phone = serializers.CharField(max_length=12)
