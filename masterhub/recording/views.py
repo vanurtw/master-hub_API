@@ -79,15 +79,14 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         recording.save()
         return Response(status=status.HTTP_201_CREATED)
 
-    @action(methods=['get'], detail=True, url_path='(?P<id_services>[^/.]+)')
+    @action(methods=['get'], detail=True, url_path='service')
     def recording(self, request, *args, **kwargs):
-        pk_service = kwargs.get('id_services')
-        pk_profile = kwargs.get('pk')
+        pk_service = kwargs.get('pk')
         service = Service.objects.get(id=pk_service)
         param = service.profile.specialization
         if param == 'master':
             try:
-                profile_work_time = WorkTime.objects.get(profile__pk=pk_profile)
+                profile_work_time = WorkTime.objects.get(profile__pk=service.profile.pk)
             except ObjectDoesNotExist:
                 return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
         else:
