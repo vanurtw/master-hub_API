@@ -82,10 +82,17 @@ class WorkTime(models.Model):
         blank=True,
         null=True
     )
-    date = models.DateField()
-    break_time = models.TimeField(
+    date = models.DateField(verbose_name='дата')
+    time_work = models.CharField(
+        verbose_name='рабочее время',
+        help_text='формат 00:00-24:00',
+        max_length=15
+    )
+    break_time = models.CharField(
         verbose_name='время перерыва',
-        default='00:30:00'
+        help_text='формат 00:00-24:00',
+        max_length=15,
+        blank=True
     )
 
     class Meta:

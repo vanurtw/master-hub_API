@@ -120,6 +120,11 @@ class ProfileMaster(models.Model):
         verbose_name='описание',
         blank=True
     )
+    time_relax = models.TimeField(
+        default='00:30:00',
+        verbose_name='время отдыха между процедурами'
+    )
+
     date_creation = models.DateField(
         verbose_name='дата создания',
         auto_now_add=True

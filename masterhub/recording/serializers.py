@@ -91,7 +91,17 @@ class RecordinCreateSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=12)
 
 
-class WorkTimeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkTime
-        fields = '__all__'
+class WorkTimeSerializer(serializers.Serializer):
+    time = serializers.SerializerMethodField()
+
+    def get_time(self, obj: WorkTime):
+        time_relax = self.context.get('profile').time_relax
+        time = obj.time_work.split('-')
+        time_start = timedelta(hours=int(time[0][:2]), minutes=int(time[0][-2:]))
+        time_end = timedelta(hours=int(time[1][:2]), minutes=int(time[1][-2:]))
+        time_relax = timedelta(hours=time_relax.hour, minutes=time_relax.minute)
+        result = []
+        while time_start<=time_end:
+            result.append(str(time_start)[:-3])
+            time_start+=time_relax
+        return result
