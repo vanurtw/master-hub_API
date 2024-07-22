@@ -76,7 +76,7 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         result = []
         date = request.GET.get('date', None)
         if date:
-            date_now = datetime.strptime(date, '%d/%m/%Y')
+            date_now = datetime.strptime(date, '%Y-%m-%d')
         else:
             date_now = datetime.now()  # дата записи
 
