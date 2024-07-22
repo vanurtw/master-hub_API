@@ -4,15 +4,16 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from user.models import ProfileMaster
-from .models import Recording
+from .models import Recording, WorkTime
 from service.models import Service
-from .serializers import ServicesRecordingSerializer, RecordingSerializer, RecordinCreateSerializer
+from .serializers import ServicesRecordingSerializer, RecordingSerializer, RecordinCreateSerializer, WorkTimeSerializer
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, ListModelMixin
 from datetime import timedelta
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 
@@ -42,21 +43,8 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         serializer = ServicesRecordingSerializer(queryset, many=True, context={'services': services})
         return Response(serializer.data)
 
-
-
     @action(methods=['get'], detail=True, url_path='service')
     def recording(self, request, *args, **kwargs):
-        pk_service = kwargs.get('pk')
-        service = Service.objects.get(id=pk_service)
-        param = service.profile.specialization
-        if param == 'master':
-            try:
-                profile_work_time = 'awd'
-            except ObjectDoesNotExist:
-                return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            try:
-                profile_work_time = 'awd'
-            except ObjectDoesNotExist:
-                return Response({'detail': 'no masters work'}, status=status.HTTP_400_BAD_REQUEST)
-            # services_time
+        work_time = WorkTime.objects.get(id=1)
+        serializer = WorkTimeSerializer(work_time)
+        return Response(serializer.data)

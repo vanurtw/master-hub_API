@@ -4,7 +4,7 @@ from service.serializers import CategoriesSerializer
 from user.models import Specialist
 from service.models import Service
 from user.models import ProfileMaster
-from .models import  Recording
+from .models import Recording, WorkTime
 from datetime import datetime, timedelta
 
 
@@ -89,3 +89,9 @@ class RecordinCreateSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     surname = serializers.CharField(max_length=30)
     phone = serializers.CharField(max_length=12)
+
+
+class WorkTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkTime
+        fields = '__all__'

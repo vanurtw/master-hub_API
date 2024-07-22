@@ -1,6 +1,7 @@
 from django.db import models
 from user.models import ProfileMaster, CustomUser, Specialist
 from service.models import Service
+from datetime import time
 
 
 class Recording(models.Model):
@@ -62,3 +63,30 @@ class Recording(models.Model):
 
     class Meta:
         verbose_name = 'запись'
+
+
+class WorkTime(models.Model):
+    profile_master = models.ForeignKey(
+        ProfileMaster,
+        verbose_name='Профиль мастера',
+        on_delete=models.CASCADE,
+        related_name='work_times',
+        blank=True,
+        null=True
+    )
+    specialist = models.ForeignKey(
+        Specialist,
+        verbose_name='Специалист',
+        on_delete=models.CASCADE,
+        related_name='work_times',
+        blank=True,
+        null=True
+    )
+    date = models.DateField()
+    break_time = models.TimeField(
+        verbose_name='время перерыва',
+        default='00:30:00'
+    )
+
+    class Meta:
+        verbose_name = 'Рабочее время'
