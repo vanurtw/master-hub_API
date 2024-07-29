@@ -57,5 +57,6 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         else:
             recordings = Recording.objects.filter(specialist=service.specialist)
         work_time = WorkTime.objects.get(id=1)
-        serializer = WorkTimeSerializer(work_time, context={'profile': profile, 'recordings': recordings, 'date': date})
+        serializer = WorkTimeSerializer(work_time,
+                                        context={'profile': profile, 'recordings': recordings, 'service': service})
         return Response(serializer.data)

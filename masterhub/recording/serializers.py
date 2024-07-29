@@ -100,8 +100,16 @@ class WorkTimeSerializer(serializers.Serializer):
         time_start = timedelta(hours=int(time[0][:2]), minutes=int(time[0][-2:]))
         time_end = timedelta(hours=int(time[1][:2]), minutes=int(time[1][-2:]))
         time_relax = timedelta(hours=time_relax.hour, minutes=time_relax.minute)
+        recordings = list(self.context.get('recordings').order_by('time_start'))
+        date = self.context.get('date')
         result = []
-        while time_start<=time_end:
+        while time_start <= time_end:
+            if recordings:
+                recording_time_start = timedelta(hours=recordings[0].time_start.hour, minutes=recordings[0].time_start.minute)
+                recording_time_end = timedelta(hours=recordings[0].time_end.hour, minutes=recordings[0].time_start.minute)
+                if not time_start + time_relax <= recording_time_start:
+                    time_start = recording_time_end + time_relax
+                    recordings.pop(0)
             result.append(str(time_start)[:-3])
-            time_start+=time_relax
+            time_start += time_relax
         return result
