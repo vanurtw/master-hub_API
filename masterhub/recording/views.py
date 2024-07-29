@@ -45,8 +45,17 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
 
     @action(methods=['get'], detail=True, url_path='service')
     def recording(self, request, *args, **kwargs):
+        date = request.GET.get('date', None)
+        if date:
+            date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        else:
+            date = datetime.date.today()
         service = get_object_or_404(Service, id=kwargs.get('pk'))
         profile = service.profile
+        if profile.specialization == 'master':
+            recordings = Recording.objects.filter(profile_master=profile)
+        else:
+            recordings = Recording.objects.filter(specialist=service.specialist)
         work_time = WorkTime.objects.get(id=1)
-        serializer = WorkTimeSerializer(work_time, context={'profile': profile})
+        serializer = WorkTimeSerializer(work_time, context={'profile': profile, 'recordings': recordings, 'date': date})
         return Response(serializer.data)
