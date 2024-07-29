@@ -5,7 +5,7 @@ from user.models import Specialist
 from service.models import Service
 from user.models import ProfileMaster
 from .models import Recording, WorkTime
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
@@ -89,6 +89,23 @@ class RecordinCreateSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     surname = serializers.CharField(max_length=30)
     phone = serializers.CharField(max_length=12)
+
+    def save(self, **kwargs):
+        data = self.data
+        time_data = data.pop('time')
+        service = Service.objects.get(id=data['service'])
+        data['service'] = service
+        data['time_start'] = time(hour=int(time_data[:2]), minute=int(time_data[3:]))
+        service_time = service.time
+        hour = data['time_start'].hour + service_time.hour
+        minute = data['time_start'].minute + service_time.minute
+        data['time_end'] = time(hour=hour, minute=minute)
+        data['date'] = datetime.strptime(data['date'], '%Y-%m-%d')
+        data['profile_master'] = service.profile
+        if data['profile_master'].specialization != 'master':
+            data['specialist'] = service.specialist
+        recording = Recording(**data, user=kwargs.get('user'))
+        recording.save()
 
 
 class WorkTimeSerializer(serializers.Serializer):

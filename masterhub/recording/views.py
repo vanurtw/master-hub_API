@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
-class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModelMixin, ListModelMixin):
+class SpecialistRecordingAPIView(GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ServicesRecordingSerializer
 
@@ -53,10 +53,17 @@ class SpecialistRecordingAPIView(GenericViewSet, RetrieveModelMixin, CreateModel
         service = get_object_or_404(Service, id=kwargs.get('pk'))
         profile = service.profile
         if profile.specialization == 'master':
-            recordings = Recording.objects.filter(profile_master=profile)
+            recordings = Recording.objects.filter(profile_master=profile, date=date)
         else:
-            recordings = Recording.objects.filter(specialist=service.specialist)
+            recordings = Recording.objects.filter(specialist=service.specialist, date=date)
         work_time = WorkTime.objects.get(id=1)
         serializer = WorkTimeSerializer(work_time,
                                         context={'profile': profile, 'recordings': recordings, 'service': service})
+        return Response(serializer.data)
+
+    def create(self, request):
+        data = request.data
+        serializer = RecordinCreateSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
         return Response(serializer.data)
