@@ -5,8 +5,6 @@ from .models import CustomUser, ProfileMaster, ProfileImages, Specialist, Review
 from rest_framework import serializers
 from service.models import Service
 from recording.serializers import ServicesSerializer
-from djoser.serializers import TokenCreateSerializer, TokenSerializer
-
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:

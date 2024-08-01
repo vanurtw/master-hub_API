@@ -72,6 +72,7 @@ class FavoritesViewSet(GenericViewSet, ListModelMixin, DestroyModelMixin):
 
 class FeedbackAPIView(GenericAPIView):
     serializer_class = FeedbackSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         profile = get_object_or_404(ProfileMaster, pk=pk)
@@ -79,7 +80,9 @@ class FeedbackAPIView(GenericAPIView):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, profile=profile)
-            return Response({'detail': 'comment created'}, status=status.HTTP_201_CREATED)
+            reviews = profile.reviews_profile.all()
+            serializer = ReviewsSerializer(reviews, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'detail': 'error'}, status=status.HTTP_400_BAD_REQUEST)
 
 
