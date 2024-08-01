@@ -10,7 +10,7 @@ from user.models import ProfileMaster
 # Create your views here.
 
 
-class ProfileAPIView(GenericViewSet,CreateModelMixin):
+class ProfileAPIView(GenericViewSet, CreateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.ProfileAminSerializer
 
@@ -21,9 +21,5 @@ class ProfileAPIView(GenericViewSet,CreateModelMixin):
         serializer = self.get_serializer(self.get_queryset())
         return Response(serializer.data)
 
-
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-

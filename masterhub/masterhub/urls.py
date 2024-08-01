@@ -19,6 +19,7 @@ from django.urls import path, include, re_path
 from .swagger import urlpatterns as urlpatterns_swagger
 from django.conf import settings
 from django.conf.urls.static import static
+# from djoser.serializers import
 
 urlpatterns = [
     path('admin/', admin.site.urls),
