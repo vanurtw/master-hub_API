@@ -113,9 +113,12 @@ class WorkTimeSerializer(serializers.Serializer):
 
     def get_time(self, obj: WorkTime):
         time_relax = self.context.get('profile').time_relax
-        time = obj.time_work.split('-')
-        time_start = timedelta(hours=int(time[0][:2]), minutes=int(time[0][-2:]))
-        time_end = timedelta(hours=int(time[1][:2]), minutes=int(time[1][-2:]))
+        time_work = obj.time_work.split('-')
+        time_break = obj.break_time.split('-')
+        time_start = timedelta(hours=int(time_work[0][:2]), minutes=int(time_work[0][-2:]))
+        time_end = timedelta(hours=int(time_work[1][:2]), minutes=int(time_work[1][-2:]))
+        time_break_start = timedelta(hours=int(time_break[0][:2]), minutes=int(time_break[0][-2:]))
+        time_break_end = timedelta(hours=int(time_break[1][:2]), minutes=int(time_break[1][-2:]))
         time_relax = timedelta(hours=time_relax.hour, minutes=time_relax.minute)
         service = self.context.get('service')
         service_time = timedelta(hours=service.time.hour, minutes=service.time.minute)
@@ -130,6 +133,7 @@ class WorkTimeSerializer(serializers.Serializer):
                 if not time_start + time_relax + service_time <= recording_time_start:
                     time_start = recording_time_end + time_relax
                     recordings.pop(0)
-            result.append(str(time_start)[:-3])
+            if time_start+service_time<=time_break_start or time_start>=time_break_end:
+                result.append(str(time_start)[:-3])
             time_start += time_relax
         return result
