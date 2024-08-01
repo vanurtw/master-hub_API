@@ -7,9 +7,6 @@ from user.models import ProfileMaster
 from .models import Recording, WorkTime
 from service.models import Service
 from .serializers import ServicesRecordingSerializer, RecordingSerializer, RecordinCreateSerializer, WorkTimeSerializer
-from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, ListModelMixin
-from datetime import timedelta
-from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
