@@ -55,7 +55,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
-    photo = serializers.ImageField(use_url=False)
+    photo = serializers.ImageField(use_url=False, required=False)
 
     class Meta:
         model = Specialist

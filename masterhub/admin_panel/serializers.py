@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 
 class ProfileAminSerializer(serializers.ModelSerializer):
-    photo = serializers.ImageField(use_url=False)
+    photo = serializers.ImageField(use_url=False, required=False)
 
     class Meta:
         model = ProfileMaster
