@@ -6,6 +6,7 @@ class ProfileAminSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileMaster
         fields = ['id',
+                  'user',
                   'name',
                   'photo',
                   'address',
