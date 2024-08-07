@@ -6,12 +6,13 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelM
 from rest_framework.permissions import IsAuthenticated
 from . import serializers
 from user.models import ProfileMaster
+from user.serializers import SpecialistSerializer
 
 
 # Create your views here.
 
 
-class ProfileAPIView(GenericViewSet, CreateModelMixin):
+class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.ProfileAminSerializer
 
@@ -35,3 +36,11 @@ class ProfileAPIView(GenericViewSet, CreateModelMixin):
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+class SpecialistAPIViewSet(GenericViewSet):
+
+
+    def list(self, request, *args, **kwargs):
+        specialists = request.user.profile_specialist.all()
+        serializer = SpecialistSerializer

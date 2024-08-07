@@ -55,10 +55,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
-    photo = serializers.SerializerMethodField()
-
-    def get_photo(self, obj):
-        return obj.photo.url
+    photo = serializers.ImageField(use_url=False)
 
     class Meta:
         model = Specialist
