@@ -6,7 +6,9 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelM
 from rest_framework.permissions import IsAuthenticated
 from . import serializers
 from user.models import ProfileMaster
-from user.serializers import SpecialistSerializer
+from user.serializers import SpecialistSerializer, SpecialistDetailSerializer
+from service.models import Service
+from user.serializers import ServiceSerializer
 
 
 # Create your views here.
@@ -39,7 +41,11 @@ class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
 
 class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin):
     permission_classes = [IsAuthenticated]
-    serializer_class = SpecialistSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return SpecialistDetailSerializer
+        return SpecialistSerializer
 
     def get_queryset(self):
         return self.request.user.user_profile.profile_specialist.all()
@@ -56,3 +62,11 @@ class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Ret
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+class ServiceAPIViewSet(GenericViewSet):
+
+    def list(self, request):
+        services = request.user.user_profile.profile_services.all()
+        serializer = ServiceSerializer(services, many=True)
+        return Response(serializer.data)
