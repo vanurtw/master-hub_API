@@ -49,10 +49,13 @@ class ProfileImagesSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = Service
-        fields = ['id', 'title', 'description', 'price', 'photo', 'time']
-
+        fields = ['id', 'title', 'description','category', 'price', 'photo', 'time']
+        # write_only_fields = ['category']
+        extra_kwargs = {'category':{'write_only':True}}
 
 class SpecialistSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)

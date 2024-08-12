@@ -64,9 +64,21 @@ class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Ret
         serializer.save()
 
 
-class ServiceAPIViewSet(GenericViewSet):
+class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin):
+    serializer_class = ServiceSerializer
 
-    def list(self, request):
-        services = request.user.user_profile.profile_services.all()
-        serializer = ServiceSerializer(services, many=True)
+    def get_queryset(self):
+        return self.request.user.user_profile.profile_services.all()
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
         return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.user_profile)
