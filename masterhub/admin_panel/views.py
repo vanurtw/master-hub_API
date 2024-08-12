@@ -7,10 +7,11 @@ from rest_framework.permissions import IsAuthenticated
 
 from service.serializers import CategoriesSerializer
 from . import serializers
-from user.models import ProfileMaster, Categories
-from user.serializers import SpecialistSerializer, SpecialistDetailSerializer
+from user.models import ProfileMaster, Categories, ProfileImages
+from user.serializers import SpecialistSerializer, SpecialistDetailSerializer, ProfileImagesSerializer
 from service.models import Service
 from user.serializers import ServiceSerializer
+from .serializers import ProfileImagesAdminSerializer
 
 
 # Create your views here.
@@ -18,7 +19,7 @@ from user.serializers import ServiceSerializer
 
 class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
     permission_classes = [IsAuthenticated]
-    serializer_class = serializers.ProfileAminSerializer
+    serializer_class = serializers.ProfileAdminSerializer
 
     def get_queryset(self):
         return get_object_or_404(ProfileMaster, user=self.request.user)
@@ -89,3 +90,8 @@ class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Retrie
 class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = CategoriesSerializer
     queryset = Categories.objects.all()
+
+
+class WorkImagesAPIViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = ProfileImagesAdminSerializer
+    queryset = ProfileImages.objects.all()
