@@ -92,6 +92,12 @@ class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
     queryset = Categories.objects.all()
 
 
-class WorkImagesAPIViewSet(GenericViewSet, ListModelMixin):
+class WorkImagesAPIViewSet(GenericViewSet):
     serializer_class = ProfileImagesAdminSerializer
     queryset = ProfileImages.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(profile=request.user.user_profile)
+        return Response(serializer.data)

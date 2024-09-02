@@ -23,6 +23,8 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=False)
+
     class Meta:
         model = ProfileImages
         fields = ['id', 'profile', 'specialist', 'image', 'date_creation']
+        extra_kwargs = {'profile': {'read_only': True}}
