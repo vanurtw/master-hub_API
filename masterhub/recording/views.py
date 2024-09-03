@@ -75,3 +75,10 @@ class SpecialistRecordingAPIView(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        recording = get_object_or_404(Recording, user=request.user, id=kwargs.get('pk'))
+        recording.delete()
+        data = request.user.user_recordings.all()
+        serializer = RecordingSerializer(data, many=True)
+        return Response(serializer.data)
