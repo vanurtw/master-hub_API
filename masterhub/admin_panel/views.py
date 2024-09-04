@@ -4,15 +4,14 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
-
 from recording.serializers import ServicesSerializer, RecordingSerializer
 from service.serializers import CategoriesSerializer
 from . import serializers
-from user.models import ProfileMaster, Categories, ProfileImages
+from user.models import ProfileMaster, Categories, ProfileImages, Reviews
 from user.serializers import SpecialistSerializer, SpecialistDetailSerializer, ProfileImagesSerializer
 from service.models import Service
 from user.serializers import ServiceSerializer
-from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer
+from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
 from recording.models import Recording, WorkTime
 
 
@@ -125,3 +124,10 @@ class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
         date = self.request.query_params.get('date')  # 2024-08-21
         queryset = WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
         return queryset
+
+
+class ReviewsAPIViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = ReviewsAdminSerializer
+
+    def get_queryset(self):
+        return Reviews.objects.filter(profile=self.request.user.user_profile)

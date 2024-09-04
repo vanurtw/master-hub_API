@@ -1,5 +1,5 @@
 from recording.serializers import SpecialistSerializer
-from user.models import ProfileMaster, ProfileImages
+from user.models import ProfileMaster, ProfileImages, Reviews
 from rest_framework import serializers
 from recording.models import WorkTime
 
@@ -44,3 +44,12 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTime
         fields = ['id', 'specialist', 'date', 'time_work', 'break_time']
+
+
+class ReviewsAdminSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.username')
+    data_create = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
+
+    class Meta:
+        model = Reviews
+        fields = ['id', 'rating_star', 'user_name', 'description', 'data_create', 'active']
