@@ -65,9 +65,9 @@ class SpecialistRecordingAPIView(GenericViewSet):
                                         context={'profile': profile, 'recordings': recordings, 'service': service})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, url_path='service/work-time')
-    def work_time(self, request, *args, **kwargs):
-        return Response({'awd': 'awd'})
+    # @action(methods=['get'], detail=True, url_path='service/work-time')
+    # def work_time(self, request, *args, **kwargs):
+    #     return Response({'awd': 'awd'})
 
     def create(self, request):
         data = request.data

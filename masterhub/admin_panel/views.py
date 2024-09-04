@@ -89,7 +89,9 @@ class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Retrie
 
 class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = CategoriesSerializer
-    queryset = Categories.objects.all()
+
+    def get_queryset(self):
+        return self.request.user.user_profile.categories.all()
 
 
 class WorkImagesAPIViewSet(GenericViewSet):
