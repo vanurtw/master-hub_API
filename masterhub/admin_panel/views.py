@@ -12,8 +12,8 @@ from user.models import ProfileMaster, Categories, ProfileImages
 from user.serializers import SpecialistSerializer, SpecialistDetailSerializer, ProfileImagesSerializer
 from service.models import Service
 from user.serializers import ServiceSerializer
-from .serializers import ProfileImagesAdminSerializer
-from recording.models import Recording
+from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer
+from recording.models import Recording, WorkTime
 
 
 # Create your views here.
@@ -118,6 +118,10 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
         return Recording.objects.filter(date=date, profile_master=self.request.user.user_profile)
 
 
-class WorkTimeAPIViewSet(GenericViewSet):
-    def list(self, request, *args, **kwargs):
-        return Response("waddshs")
+class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = WorkTimeAdminSerializer
+
+    def get_queryset(self):
+        date = self.request.query_params.get('date')  # 2024-08-21
+        queryset = WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
+        return queryset
