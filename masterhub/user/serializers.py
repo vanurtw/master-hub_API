@@ -215,7 +215,7 @@ class SpecialistDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Specialist
-        fields = ['id', 'name', 'job', 'description', 'photo', 'service_count', 'services', 'images_work']
+        fields = ['id', 'name', 'job', 'description', 'photo', 'services_count', 'services', 'images_work']
 
 
 class TokenSerializer(serializers.ModelSerializer):
