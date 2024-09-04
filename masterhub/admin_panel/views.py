@@ -116,3 +116,8 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
     def get_queryset(self):
         date = self.request.query_params.get('date')
         return Recording.objects.filter(date=date, profile_master=self.request.user.user_profile)
+
+
+class WorkTimeAPIViewSet(GenericViewSet):
+    def list(self, request, *args, **kwargs):
+        return Response("waddshs")

@@ -11,7 +11,7 @@ router.register('service', views.ServiceAPIViewSet, basename='admin-panel_servic
 router.register('categories', views.CategoriesAPIViewSet, basename='admin-panel_categories')
 router.register('images', views.WorkImagesAPIViewSet, basename='admin-panel_work-images')
 router.register('recording', views.RecordingAPIViewSet, basename='admin-panel_recording')
-
+router.register('work-time', views.WorkTimeAPIViewSet, basename='admin-panel_work-time')
 
 urlpatterns = [
     path('', include(router.urls)),
