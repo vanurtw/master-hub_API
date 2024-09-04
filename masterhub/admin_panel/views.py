@@ -5,6 +5,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 
+from recording.serializers import ServicesSerializer
 from service.serializers import CategoriesSerializer
 from . import serializers
 from user.models import ProfileMaster, Categories, ProfileImages
@@ -68,7 +69,8 @@ class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Ret
 
 
 class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin):
-    serializer_class = ServiceSerializer
+    # serializer_class = ServiceSerializer
+    serializer_class = ServicesSerializer
 
     def get_queryset(self):
         return self.request.user.user_profile.profile_services.all()
