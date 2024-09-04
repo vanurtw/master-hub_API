@@ -194,7 +194,7 @@ class SpecialistDetailSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
     images_work = serializers.SerializerMethodField()
-    service_count = serializers.SerializerMethodField()
+    services_count = serializers.SerializerMethodField()
 
     def get_photo(self, obj):
         return obj.photo.url
@@ -209,7 +209,7 @@ class SpecialistDetailSerializer(serializers.ModelSerializer):
         serializer = ProfileImagesSerializer(queryset, many=True)
         return serializer.data
 
-    def get_service_count(self, obj):
+    def get_services_count(self, obj):
         count = obj.specialist_services.count()
         return count
 
