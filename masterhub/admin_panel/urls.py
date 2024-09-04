@@ -10,6 +10,7 @@ router.register('specialist', views.SpecialistAPIViewSet, basename='admin-panel_
 router.register('service', views.ServiceAPIViewSet, basename='admin-panel_service')
 router.register('categories', views.CategoriesAPIViewSet, basename='admin-panel_categories')
 router.register('images', views.WorkImagesAPIViewSet, basename='admin-panel_work-images')
+router.register('recording', views.RecordingAPIViewSet, basename='admin-panel_recording')
 
 
 urlpatterns = [

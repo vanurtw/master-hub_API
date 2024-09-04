@@ -5,7 +5,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 
-from recording.serializers import ServicesSerializer
+from recording.serializers import ServicesSerializer, RecordingSerializer
 from service.serializers import CategoriesSerializer
 from . import serializers
 from user.models import ProfileMaster, Categories, ProfileImages
@@ -13,6 +13,7 @@ from user.serializers import SpecialistSerializer, SpecialistDetailSerializer, P
 from service.models import Service
 from user.serializers import ServiceSerializer
 from .serializers import ProfileImagesAdminSerializer
+from recording.models import Recording
 
 
 # Create your views here.
@@ -97,6 +98,7 @@ class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
 
 
 class WorkImagesAPIViewSet(GenericViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileImagesAdminSerializer
     queryset = ProfileImages.objects.all()
 
@@ -105,3 +107,12 @@ class WorkImagesAPIViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(profile=request.user.user_profile)
         return Response(serializer.data)
+
+
+class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecordingSerializer
+
+    def get_queryset(self):
+        date = self.request.query_params.get('date')
+        return Recording.objects.filter(date=date, profile_master=self.request.user.user_profile)
