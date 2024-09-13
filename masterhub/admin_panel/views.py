@@ -14,7 +14,8 @@ from service.models import Service
 from user.serializers import ServiceSerializer
 from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
 from recording.models import Recording, WorkTime
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
+from django.core.exceptions import ValidationError as ValidationErrorException
 
 
 # Create your views here.
@@ -56,7 +57,7 @@ class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Ret
     def get_queryset(self):
         try:
             return self.request.user.user_profile.profile_specialist.all()
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
 
     def perform_create(self, serializer):
@@ -80,7 +81,7 @@ class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Retrie
     def get_queryset(self):
         try:
             return self.request.user.user_profile.profile_services.all()
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
 
     def partial_update(self, request, *args, **kwargs):
@@ -103,7 +104,7 @@ class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
     def get_queryset(self):
         try:
             return self.request.user.user_profile.categories.all()
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
 
 
@@ -127,7 +128,7 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
         date = self.request.query_params.get('date')
         try:
             recordings = Recording.objects.filter(profile_master=self.request.user.user_profile)
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
         if date:
             recordings = recordings.filter(date=date)
@@ -141,8 +142,10 @@ class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
         date = self.request.query_params.get('date')  # 2024-08-21
         try:
             return WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
+        except ValidationErrorException as exp:
+            raise ValidationError(exp.messages)
 
 
 class ReviewsAPIViewSet(GenericViewSet, ListModelMixin):
@@ -151,5 +154,5 @@ class ReviewsAPIViewSet(GenericViewSet, ListModelMixin):
     def get_queryset(self):
         try:
             return Reviews.objects.filter(profile=self.request.user.user_profile)
-        except:
+        except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
