@@ -114,8 +114,10 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         date = self.request.query_params.get('date')
-        return Recording.objects.filter(date=date, profile_master=self.request.user.user_profile)
-
+        recordings = Recording.objects.filter(profile_master=self.request.user.user_profile)
+        if date:
+            recordings = recordings.filter(date=date)
+        return recordings
 
 class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = WorkTimeAdminSerializer
