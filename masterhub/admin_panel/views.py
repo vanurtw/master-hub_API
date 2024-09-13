@@ -108,16 +108,22 @@ class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
             raise NotFound('No ProfileMaster matches the given query.')
 
 
-class WorkImagesAPIViewSet(GenericViewSet):
+class WorkImagesAPIViewSet(GenericViewSet, ListModelMixin):
+    '''Примеры работ'''
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileImagesAdminSerializer
-    queryset = ProfileImages.objects.all()
 
+    def get_queryset(self):
+        try:
+            return self.request.user.user_profile.profile_images.all()
+        except AttributeError:
+            raise NotFound('No ProfileMaster matches the given query.')
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(profile=request.user.user_profile)
         return Response(serializer.data)
+
 
 
 class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
