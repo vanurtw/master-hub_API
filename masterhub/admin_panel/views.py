@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet
@@ -13,6 +14,7 @@ from service.models import Service
 from user.serializers import ServiceSerializer
 from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
 from recording.models import Recording, WorkTime
+from rest_framework.exceptions import NotFound
 
 
 # Create your views here.
@@ -52,7 +54,10 @@ class SpecialistAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Ret
         return SpecialistSerializer
 
     def get_queryset(self):
-        return self.request.user.user_profile.profile_specialist.all()
+        try:
+            return self.request.user.user_profile.profile_specialist.all()
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user.user_profile)
@@ -73,7 +78,10 @@ class ServiceAPIViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, Retrie
     serializer_class = ServicesSerializer
 
     def get_queryset(self):
-        return self.request.user.user_profile.profile_services.all()
+        try:
+            return self.request.user.user_profile.profile_services.all()
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -93,7 +101,10 @@ class CategoriesAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = CategoriesSerializer
 
     def get_queryset(self):
-        return self.request.user.user_profile.categories.all()
+        try:
+            return self.request.user.user_profile.categories.all()
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
 
 
 class WorkImagesAPIViewSet(GenericViewSet):
@@ -114,22 +125,31 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         date = self.request.query_params.get('date')
-        recordings = Recording.objects.filter(profile_master=self.request.user.user_profile)
+        try:
+            recordings = Recording.objects.filter(profile_master=self.request.user.user_profile)
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
         if date:
             recordings = recordings.filter(date=date)
         return recordings
+
 
 class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = WorkTimeAdminSerializer
 
     def get_queryset(self):
         date = self.request.query_params.get('date')  # 2024-08-21
-        queryset = WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
-        return queryset
+        try:
+            return WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
 
 
 class ReviewsAPIViewSet(GenericViewSet, ListModelMixin):
     serializer_class = ReviewsAdminSerializer
 
     def get_queryset(self):
-        return Reviews.objects.filter(profile=self.request.user.user_profile)
+        try:
+            return Reviews.objects.filter(profile=self.request.user.user_profile)
+        except:
+            raise NotFound('No ProfileMaster matches the given query.')
