@@ -7,16 +7,12 @@ from recording.models import WorkTime
 class CategoriesAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ['id', 'title']
+        fields = ['id']
 
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)
-    # categories = CategoriesAdminSerializer(read_only=False, many=True)
-    categories = serializers.SerializerMethodField()
 
-    def get_categories(self, *args, **kwargs):
-        return 7
 
     class Meta:
         model = ProfileMaster
@@ -31,8 +27,9 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                   'link_tg',
                   'description',
                   'time_relax',
-                  'date_creation'
+                  'date_creation',
                   ]
+        extra_kwargs = {'categories': {'write_only': True}}
 
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
