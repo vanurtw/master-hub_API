@@ -33,6 +33,7 @@ class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
+        # categories = map(int, self.request.data.get('categories').split(','))
         serializer.save(user=self.request.user)
 
     def partial_update(self, request, *args, **kwargs):
@@ -118,12 +119,12 @@ class WorkImagesAPIViewSet(GenericViewSet, ListModelMixin):
             return self.request.user.user_profile.profile_images.all()
         except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(profile=request.user.user_profile)
         return Response(serializer.data)
-
 
 
 class RecordingAPIViewSet(GenericViewSet, ListModelMixin):

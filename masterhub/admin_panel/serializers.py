@@ -16,11 +16,13 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                   'phone',
                   'specialization',
                   'link_vk',
+                  'categories',
                   'link_tg',
                   'description',
                   'time_relax',
                   'date_creation'
                   ]
+        extra_kwargs = {'categories': {'write_only': True}}
 
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
