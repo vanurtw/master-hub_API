@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet
@@ -126,7 +127,7 @@ class WorkImagesAPIViewSet(GenericViewSet, ListModelMixin):
         return Response(serializer.data)
 
 
-class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
+class RecordingAPIViewSet(GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecordingSerializer
 
@@ -139,6 +140,12 @@ class RecordingAPIViewSet(GenericViewSet, ListModelMixin):
         if date:
             recordings = recordings.filter(date=date)
         return recordings
+
+    def retrieve(self, request, *args, **kwargs):
+        specialist_id = kwargs.get('pk')
+        queryset = self.get_queryset().filter(specialist=specialist_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin):
