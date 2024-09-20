@@ -33,6 +33,12 @@ class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
         serializer = self.get_serializer(self.get_queryset())
         return Response(serializer.data)
 
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.ProfileAdminSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 

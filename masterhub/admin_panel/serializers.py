@@ -13,6 +13,8 @@ class CategoriesAdminSerializer(serializers.ModelSerializer):
 class ProfileAdminSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)
 
+
+
     class Meta:
         model = ProfileMaster
         fields = ['id',
