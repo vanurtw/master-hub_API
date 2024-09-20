@@ -13,7 +13,6 @@ class CategoriesAdminSerializer(serializers.ModelSerializer):
 class ProfileAdminSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)
 
-
     class Meta:
         model = ProfileMaster
         fields = ['id',
@@ -29,7 +28,7 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                   'time_relax',
                   'date_creation',
                   ]
-        extra_kwargs = {'categories': {'write_only': True}}
+        extra_kwargs = {'categories': {'write_only': True, 'many': True}}
 
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
