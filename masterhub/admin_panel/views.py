@@ -143,7 +143,10 @@ class RecordingAPIViewSet(GenericViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         specialist_id = kwargs.get('pk')
-        queryset = self.get_queryset().filter(specialist=specialist_id)
+        if request.user.user_profile.specialization == 'studio':
+            queryset = self.get_queryset().filter(specialist=specialist_id)
+        else:
+            queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
