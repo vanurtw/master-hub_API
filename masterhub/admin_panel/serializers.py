@@ -32,7 +32,12 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super(ProfileAdminSerializer, self).create(validated_data)
-        Specialist.objects.create(name=validated_data.get('name'), job=validated_data.get('description'), )
+        Specialist.objects.create(name=validated_data.get('name'),
+                                  description=validated_data.get('description'),
+                                  profile=instance,
+                                  photo=instance.photo.url
+                                  )
+        return instance
 
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
