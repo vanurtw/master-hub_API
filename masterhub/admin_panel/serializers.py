@@ -1,5 +1,5 @@
 from recording.serializers import SpecialistSerializer
-from user.models import ProfileMaster, ProfileImages, Reviews, Categories
+from user.models import ProfileMaster, ProfileImages, Reviews, Categories, Specialist
 from rest_framework import serializers
 from recording.models import WorkTime
 
@@ -12,8 +12,6 @@ class CategoriesAdminSerializer(serializers.ModelSerializer):
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)
-
-
 
     class Meta:
         model = ProfileMaster
@@ -31,6 +29,10 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                   'date_creation',
                   ]
         extra_kwargs = {'categories': {'write_only': True, 'many': True}}
+
+    def create(self, validated_data):
+        instance = super(ProfileAdminSerializer, self).create(validated_data)
+        Specialist.objects.create(name=validated_data.get('name'), job=validated_data.get('description'), )
 
 
 class ProfileImagesAdminSerializer(serializers.ModelSerializer):
