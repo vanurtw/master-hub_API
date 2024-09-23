@@ -12,6 +12,14 @@ class CategoriesAdminSerializer(serializers.ModelSerializer):
 
 class ProfileAdminSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(use_url=False, required=False)
+    categories = serializers.CharField(required=False, write_only=True)
+
+    def validate_categories(self, attrs):
+        categories = [int(i) for i in attrs.split()]
+        cat_count = Categories.objects.filter(id__in=categories).count()
+        if cat_count != len(categories):
+            raise serializers.ValidationError('No such category')
+        return categories
 
     class Meta:
         model = ProfileMaster
@@ -21,14 +29,13 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
                   'address',
                   'phone',
                   'specialization',
-                  'link_vk',
                   'categories',
+                  'link_vk',
                   'link_tg',
                   'description',
                   'time_relax',
                   'date_creation',
                   ]
-        extra_kwargs = {'categories': {'write_only': True, 'many': True}}
 
     def create(self, validated_data):
         instance = super(ProfileAdminSerializer, self).create(validated_data)
