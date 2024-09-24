@@ -184,13 +184,10 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 
 class SpecialistDetailSerializer(serializers.ModelSerializer):
-    photo = serializers.SerializerMethodField()
+    photo = serializers.ImageField(use_url=False)
     services = serializers.SerializerMethodField()
     images_work = serializers.SerializerMethodField()
     services_count = serializers.SerializerMethodField()
-
-    def get_photo(self, obj):
-        return obj.photo.url
 
     def get_services(self, obj):
         services = obj.specialist_services.all()
