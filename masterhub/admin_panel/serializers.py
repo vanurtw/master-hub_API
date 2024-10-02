@@ -2,6 +2,7 @@ from recording.serializers import SpecialistSerializer
 from user.models import ProfileMaster, ProfileImages, Reviews, Categories, Specialist
 from rest_framework import serializers
 from recording.models import WorkTime
+from datetime import datetime, timedelta
 
 
 class CategoriesAdminSerializer(serializers.ModelSerializer):
@@ -58,6 +59,31 @@ class ProfileImagesAdminSerializer(serializers.ModelSerializer):
 
 class WorkTimeAdminSerializer(serializers.ModelSerializer):
     specialist = serializers.SerializerMethodField()
+    time_work = serializers.SerializerMethodField()
+
+    def get_time_work(self, obj):
+        time = obj.time_work.split('-')
+        time_start = datetime.strptime(time[0], '%H:%M')
+        time_end = datetime.strptime(time[-1], '%H:%M')
+        time_break = obj.break_time
+        if time_break:
+            time_br = time_break.split('-')
+            time_br_start = datetime.strptime(time_br[0], '%H:%M')
+            time_br_end = datetime.strptime(time_br[-1], '%H:%M')
+            time_br_start_td = timedelta(hours=time_br_start.hour, minutes=time_start.minute)
+            time_br_end_td = timedelta(hours=time_br_end.hour, minutes=time_end.minute)
+        result = []
+        time_start_timedelta = timedelta(hours=time_start.hour, minutes=time_start.minute)
+        time_end_timedelta = timedelta(hours=time_end.hour, minutes=time_end.minute)
+        while time_start_timedelta <= time_end_timedelta:
+            if time_break:
+                if time_start_timedelta <= time_br_start_td or time_start_timedelta >= time_br_end_td:
+                    result.append(str(time_start_timedelta))
+            else:
+                result.append(str(time_start_timedelta))
+            time_start_timedelta += timedelta(hours=1)
+
+        return result
 
     def get_specialist(self, obj):
         specialist = obj.specialist
