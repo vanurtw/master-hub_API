@@ -49,7 +49,7 @@ class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         if instance.specialization == 'master':
-            specialist.update(name=instance.name, description=instance.description)
+            specialist.update(name=instance.name, description=instance.description, photo=instance.photo)
         return Response(serializer.data)
 
     def perform_update(self, serializer):
