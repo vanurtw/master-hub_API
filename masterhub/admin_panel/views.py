@@ -44,9 +44,12 @@ class ProfileAPIViewSet(GenericViewSet, CreateModelMixin):
 
     def partial_update(self, request, *args, **kwargs):
         instance = get_object_or_404(ProfileMaster, user=request.user, id=kwargs.get('pk'))
+        specialist = Specialist.objects.filter(name=instance.name, profile=instance)
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        if instance.specialization == 'master':
+            specialist.update(name=instance.name, description=instance.description)
         return Response(serializer.data)
 
     def perform_update(self, serializer):
