@@ -42,7 +42,7 @@ class ProfileAdminSerializer(serializers.ModelSerializer):
         Specialist.objects.create(name=validated_data.get('name'),
                                   description=validated_data.get('description'),
                                   profile=instance,
-                                  photo=instance.photo.url
+                                  photo=instance.photo
                                   )
         return instance
 
