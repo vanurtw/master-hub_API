@@ -60,6 +60,7 @@ class ProfileImagesAdminSerializer(serializers.ModelSerializer):
 class WorkTimeAdminSerializer(serializers.ModelSerializer):
     specialist = serializers.SerializerMethodField()
     time_work = serializers.SerializerMethodField()
+    break_time = serializers.SerializerMethodField()
 
     def get_time_work(self, obj):
         time = obj.time_work.split('-')
@@ -82,7 +83,21 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
             else:
                 result.append(str(time_start_timedelta))
             time_start_timedelta += timedelta(hours=1)
+        return result
 
+    def get_break_time(self, obj):
+        time_break = obj.break_time
+        if not time_break:
+            return None
+        time_break = time_break.split('-')
+        time_start = datetime.strptime(time_break[0], '%H:%M')
+        time_end = datetime.strptime(time_break[-1], '%H:%M')
+        time_start_td = timedelta(hours=time_start.hour, minutes=time_start.minute)
+        time_end_td = timedelta(hours=time_end.hour, minutes=time_end.minute)
+        result = []
+        while time_start_td < time_end_td:
+            result.append(str(time_start_td))
+            time_start_td += timedelta(hours=1)
         return result
 
     def get_specialist(self, obj):

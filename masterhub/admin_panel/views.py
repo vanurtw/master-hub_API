@@ -174,7 +174,7 @@ class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         specialist = get_object_or_404(Specialist, id=kwargs.get('pk'))
         queryset = queryset.filter(specialist=specialist)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(queryset[0])
         return Response(serializer.data)
 
 
