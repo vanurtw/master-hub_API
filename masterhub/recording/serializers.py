@@ -105,8 +105,7 @@ class RecordinCreateSerializer(serializers.Serializer):
         data['time_end'] = time(hour=hour, minute=minute)
         data['date'] = datetime.strptime(data['date'], '%Y-%m-%d')
         data['profile_master'] = service.profile
-        if data['profile_master'].specialization != 'master':
-            data['specialist'] = service.specialist
+        data['specialist'] = service.specialist
         recording = Recording(**data, user=kwargs.get('user'))
         recording.save()
 
