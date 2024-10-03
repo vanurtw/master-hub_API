@@ -85,6 +85,16 @@ class WorkTimeAdminSerializer(serializers.ModelSerializer):
             time_start_timedelta += timedelta(hours=1)
         return result
 
+    class Meta:
+        model = WorkTime
+        fields = ['id', 'profile_master', 'specialist', 'date', 'time_work', 'break_time']
+
+
+class WorkTimeCreateAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkTime
+        fields = ['id', 'profile_master', 'specialist', 'date', 'time_work', 'break_time']
+
     def get_break_time(self, obj):
         time_break = obj.break_time
         if not time_break:

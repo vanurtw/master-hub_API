@@ -13,7 +13,8 @@ from user.models import ProfileMaster, Categories, ProfileImages, Reviews, Speci
 from user.serializers import SpecialistSerializer, SpecialistDetailSerializer, ProfileImagesSerializer
 from service.models import Service
 from user.serializers import ServiceSerializer
-from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer
+from .serializers import ProfileImagesAdminSerializer, WorkTimeAdminSerializer, ReviewsAdminSerializer, \
+    WorkTimeCreateAdminSerializer
 from recording.models import Recording, WorkTime
 from rest_framework.exceptions import NotFound, ValidationError
 from django.core.exceptions import ValidationError as ValidationErrorException
@@ -162,10 +163,13 @@ class RecordingAPIViewSet(GenericViewSet):
 
 class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = WorkTimeAdminSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         date = self.request.query_params.get('date')  # 2024-08-21
-        specialist_id = self.request.query_params('id')
+        specialist_id = self.request.query_params.get('id')
+        # if not specialist_id:
+        #     raise NotFound('did not send id')
         try:
             return WorkTime.objects.filter(date=date,
                                            specialist=specialist_id,
@@ -177,11 +181,30 @@ class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
             raise ValidationError(exp.messages)
 
     def retrieve(self, *args, **kwargs):
+        # id специалиста
         queryset = self.get_queryset()
         specialist = get_object_or_404(Specialist, id=kwargs.get('pk'))
         queryset = queryset.filter(specialist=specialist)
         serializer = self.get_serializer(queryset[0])
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = WorkTimeCreateAdminSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(profile_master=request.user.user_profile)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = WorkTime.objects.get(pk=kwargs.get('pk'))
+        serializer = WorkTimeCreateAdminSerializer(instance=instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = get_object_or_404(WorkTime, pk=kwargs.get('pk'), profile_master=request.user.user_profile)
+        instance.delete()
+        return Response({'status': 'entry deleted'})
 
 
 class ReviewsAPIViewSet(GenericViewSet, ListModelMixin):
