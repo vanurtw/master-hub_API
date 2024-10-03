@@ -53,12 +53,14 @@ class SpecialistRecordingAPIView(GenericViewSet):
                 return Response({'detail': 'no working hours'}, status=status.HTTP_400_BAD_REQUEST)
         service = get_object_or_404(Service, id=kwargs.get('pk'))
         profile = service.profile
-        if profile.specialization == 'master':
-            recordings = Recording.objects.filter(profile_master=profile, date=date)
-            work_time = work_time.filter(profile_master=profile)
-        else:
-            recordings = Recording.objects.filter(specialist=service.specialist, date=date)
-            work_time = work_time.filter(specialist=service.specialist)
+        recordings = Recording.objects.filter(profile_master=profile, date=date, specialist=service.specialist)
+        work_time = work_time.filter(profile_master=profile, specialist=service.specialist)
+        # if profile.specialization == 'master':
+        #     recordings = Recording.objects.filter(profile_master=profile, date=date)
+        #     work_time = work_time.filter(profile_master=profile)
+        # else:
+        #     recordings = Recording.objects.filter(specialist=service.specialist, date=date)
+        #     work_time = work_time.filter(specialist=service.specialist)
         if not work_time.exists():
             return Response({'detail': 'no working hours'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = WorkTimeSerializer(work_time[0],

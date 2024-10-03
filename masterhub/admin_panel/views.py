@@ -165,8 +165,12 @@ class WorkTimeAPIViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_queryset(self):
         date = self.request.query_params.get('date')  # 2024-08-21
+        specialist_id = self.request.query_params('id')
         try:
-            return WorkTime.objects.filter(date=date, profile_master=self.request.user.user_profile)
+            return WorkTime.objects.filter(date=date,
+                                           specialist=specialist_id,
+                                           profile_master=self.request.user.user_profile
+                                           )
         except AttributeError:
             raise NotFound('No ProfileMaster matches the given query.')
         except ValidationErrorException as exp:
